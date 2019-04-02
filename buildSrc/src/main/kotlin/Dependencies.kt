@@ -1,6 +1,10 @@
 object Version {
     internal const val GRADLE_ANDROID = "3.4.0-rc02"
     internal const val GRADLE_PROTOBUF = "0.8.8"
+    internal const val GRADLE_DETEKT = "1.0.0-RC14"
+    internal const val GRADLE_KTLINT = "7.2.1"
+    internal const val GRADLE_VERSIONS = "0.21.0"
+    internal const val GRADLE_ANDROID_MAVEN = "2.1"
 
     internal const val KOTLIN = "1.3.21"
     internal const val COROUTINES = "1.1.1"
@@ -23,6 +27,10 @@ object ProjectLib {
     const val ANDROID = "com.android.tools.build:gradle:${Version.GRADLE_ANDROID}"
     const val KOTLIN = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Version.KOTLIN}"
     const val PROTOBUF = "com.google.protobuf:protobuf-gradle-plugin:${Version.GRADLE_PROTOBUF}"
+    const val DETEKT = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:${Version.GRADLE_DETEKT}"
+    const val KTLINT = "org.jlleitschuh.gradle:ktlint-gradle:${Version.GRADLE_KTLINT}"
+    const val VERSIONS = "com.github.ben-manes:gradle-versions-plugin:${Version.GRADLE_VERSIONS}"
+    const val ANDROID_MAVEN = "com.github.dcendents:android-maven-gradle-plugin:${Version.GRADLE_ANDROID_MAVEN}"
 }
 
 object ModuleLib {

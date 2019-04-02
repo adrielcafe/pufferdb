@@ -1,5 +1,8 @@
 apply plugin: 'kotlin'
 apply plugin: 'com.google.protobuf'
+apply plugin: 'maven'
+
+group = Maven.GROUP
 
 sourceSets {
     main.java.srcDirs += ['src/main/kotlin/', "$protobuf.generatedFilesBaseDir/main/javalite"]

@@ -2,18 +2,18 @@ buildscript {
     repositories {
         google()
         jcenter()
+        mavenCentral()
+        maven { url "https://plugins.gradle.org/m2/" }
     }
     dependencies {
         classpath ProjectLib.ANDROID
         classpath ProjectLib.KOTLIN
         classpath ProjectLib.PROTOBUF
+        classpath ProjectLib.DETEKT
+        classpath ProjectLib.KTLINT
+        classpath ProjectLib.VERSIONS
+        classpath ProjectLib.ANDROID_MAVEN
     }
-}
-
-plugins {
-    id 'io.gitlab.arturbosch.detekt' version '1.0.0-RC14'
-    id 'org.jlleitschuh.gradle.ktlint' version '7.2.1'
-    id 'com.github.ben-manes.versions' version '0.21.0'
 }
 
 allprojects {
