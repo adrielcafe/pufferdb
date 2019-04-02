@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+option java_package = "cafe.adriel.pufferdb.proto";
+option java_outer_classname = "PufferDBProto";
+option java_multiple_files = true;
+option optimize_for = LITE_RUNTIME;
+
+message PufferProto {
+    map<string, ValueProto> nest = 1;
+}
+
+message ValueProto {
+    oneof type {
+        double double_value = 1;
+        float float_value = 2;
+        sint32 int_value = 3;
+        sint64 long_value = 4;
+        bool bool_value = 5;
+        string string_value = 6;
+    }
+}

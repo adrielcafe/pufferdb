@@ -1,0 +1,31 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 28
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin/'
+    }
+}
+
+dependencies {
+    implementation project(":core")
+
+    implementation ModuleLib.APP_COMPAT
+    implementation ModuleLib.KOTLIN
+
+    testImplementation TestLib.JUNIT
+    androidTestImplementation TestLib.ESPRESSO
+    androidTestImplementation TestLib.RUNNER
+}

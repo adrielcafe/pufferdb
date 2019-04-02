@@ -1,0 +1,34 @@
+buildscript {
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath ProjectLib.ANDROID
+        classpath ProjectLib.KOTLIN
+        classpath ProjectLib.PROTOBUF
+    }
+}
+
+plugins {
+    id 'io.gitlab.arturbosch.detekt' version '1.0.0-RC14'
+    id 'org.jlleitschuh.gradle.ktlint' version '7.2.1'
+    id 'com.github.ben-manes.versions' version '0.21.0'
+}
+
+allprojects {
+    apply plugin: 'io.gitlab.arturbosch.detekt'
+    apply plugin: 'org.jlleitschuh.gradle.ktlint'
+    apply plugin: 'com.github.ben-manes.versions'
+    repositories {
+        google()
+        jcenter()
+        mavenCentral()
+    }
+    detekt {
+        config = files("${rootDir}/detekt.yml")
+    }
+    ktlint {
+        android = true
+    }
+}

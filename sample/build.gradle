@@ -1,0 +1,45 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "cafe.adriel.pufferdb.sample"
+        minSdkVersion 14
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin/'
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation project(":core")
+    implementation project(":android")
+    implementation project(":coroutines")
+    implementation project(":rxjava")
+
+    implementation ModuleLib.APP_COMPAT
+    implementation ModuleLib.KOTLIN
+    implementation ModuleLib.COROUTINES
+    implementation ModuleLib.RXJAVA
+    implementation ModuleLib.RXANDROID
+
+    testImplementation TestLib.JUNIT
+    androidTestImplementation TestLib.ESPRESSO
+    androidTestImplementation TestLib.RUNNER
+}

@@ -1,0 +1,37 @@
+apply plugin: 'kotlin'
+apply plugin: 'com.google.protobuf'
+
+sourceSets {
+    main.java.srcDirs += ['src/main/kotlin/', "$protobuf.generatedFilesBaseDir/main/javalite"]
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation ModuleLib.KOTLIN
+    implementation ModuleLib.PROTOBUF_LITE
+}
+
+protobuf {
+    protoc {
+        artifact = ModuleLib.PROTOC
+    }
+    plugins {
+        javalite {
+            artifact = ModuleLib.PROTOC_LITE
+        }
+    }
+    generateProtoTasks {
+        all().each { task ->
+            task.builtins {
+                remove java
+            }
+            task.plugins {
+                javalite { }
+            }
+        }
+    }
+}
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
