@@ -5,15 +5,15 @@
 [![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg?style=flat-square)](https://ktlint.github.io/) 
 
 # 🚧 WORK IN PROGRESS 🚧
-This library is currently in pre-alpha and should **not** be used in production. Stable release coming very soon!
+This library is currently in pre-alpha and should **not** be used in production. Stable release coming shortly!
 
 # ![logo](https://github.com/adrielcafe/pufferdb/blob/master/logo.png?raw=true) PufferDB
 
 **PufferDB** is a :zap: key-value database powered by **P**rotocol B**uffer**s (aka [Protobuf](https://developers.google.com/protocol-buffers/)).
 
-The intent of this library is to provide a efficient, reliable and Android **independent** storage. 
+The purpose of this library is to provide an efficient, reliable and Android **independent** storage. 
 
-Why Android independent? The SharedPreferences and many great third-party libraries (like [Paper](https://github.com/pilgr/Paper/) and [MMKV](https://github.com/Tencent/MMKV/)) requires the Android Context to work (they're Android *dependents*). But if you are like me and want a **kotlin-only data module** (following the principles of [Clean Architecture](https://antonioleiva.com/clean-architecture-android/)), this library is for you!
+Why Android independent? The [SharedPreferences](https://developer.android.com/reference/android/content/SharedPreferences) and many great third-party libraries (like [Paper](https://github.com/pilgr/Paper/) and [MMKV](https://github.com/Tencent/MMKV/)) requires the Android Context to work (they're Android *dependents*). But if you are like me and want a **kotlin-only data module** (following the principles of [Clean Architecture](https://antonioleiva.com/clean-architecture-android/)), this library is for you!
 
 ### About Protobuf
 
@@ -23,7 +23,7 @@ Protocol Buffers are a language-neutral, platform-neutral extensible mechanism f
 * Fast (benchmark coming soon™)
 * Works on [Android and JVM](#platform-compatibility)
 * [Simple API](#core)
-* [Thread-safe](#thread-safe)
+* [Thread-safe](#threading)
 * Wrappers for [Coroutines](#coroutines) and [RxJava](#rxjava)
 
 ### Supported types
@@ -77,7 +77,7 @@ Current version: [![JitPack](https://img.shields.io/jitpack/v/github/adrielcafe/
 ### Core
 As the name suggests, Core is a standalone module and all other modules depends on it.
 
-It's API is similar to `SharedPreferences`:
+Its API is similar to `SharedPreferences`:
 
 ```kotlin
 val pufferFile = File("path/to/puffer/file")
@@ -103,14 +103,14 @@ puffer.apply {
 }
 ```
 
-But unlikely `SharedPreferences`, there's no `apply()` or `commit()`. Changes are saved every time a write operations happens.
+But unlike `SharedPreferences`, there's no `apply()` or `commit()`. Changes are saved every time a write operation happens.
 
 PufferDB keeps an immutable and read-only memory cache for fast reads.
 
 #### Threading
-PufferDB uses the [`ReentrantReadWriteLock`](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/locks/ReentrantReadWriteLock.html) to ensure that read-write operations will run concurrently.
+PufferDB uses the [`ReentrantReadWriteLock`](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/locks/ReentrantReadWriteLock.html) to ensure thread-safe read-write operations.
 
-You *can* run the API methods in the Android Main Thread, but you *shouldn't* do that! Please, use one of the wrapper modules or extension functions instead.
+You *can* run the API methods on the Android Main Thread, but you *shouldn't* do this! Please, use one of the wrapper modules or built in extension functions instead.
 
 ### Android
 The Android module contains an `AndroidPufferDB` helper class:
