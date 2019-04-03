@@ -32,7 +32,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         private const val VALUE_INT = 123
         private const val VALUE_LONG = 456L
         private const val VALUE_BOOLEAN = true
-        private const val VALUE_STRING = "\uD83D\uDC1F Hello Puffer!"
+        private const val VALUE_STRING = "Hello Puffer!"
     }
 
     private val pufferCore by lazy {
