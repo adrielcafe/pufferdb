@@ -4,18 +4,18 @@
 [![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg?style=flat-square)](https://ktlint.github.io/) 
 
 <h1>
-	<img src="https://github.com/adrielcafe/PufferDB/blob/master/logo.svg?raw=true" height="100"> PufferDB
+	<img src="https://github.com/adrielcafe/PufferDB/blob/master/logo.png?raw=true" height="100"> PufferDB
 </h1>
 
 **PufferDB** is a :zap: key-value database powered by **P**rotocol B**uffer**s (aka [Protobuf](https://developers.google.com/protocol-buffers/)).
 
-Protocol Buffers are a language-neutral, platform-neutral extensible mechanism for serializing structured data. Compared to JSON, Protobuf files are [smaller and faster](https://auth0.com/blog/beating-json-performance-with-protobuf/) to read/write because it stores data in a [efficient binary format](https://developers.google.com/protocol-buffers/docs/encoding).
+Protocol Buffers are a language-neutral, platform-neutral extensible mechanism for serializing structured data. Compared to JSON, Protobuf files are [smaller and faster](https://auth0.com/blog/beating-json-performance-with-protobuf/) to read/write because it stores data in an [efficient binary format](https://developers.google.com/protocol-buffers/docs/encoding).
 
 ## Features
 * [Thread-safe](https://github.com/adrielcafe/PufferDB/blob/master/core/src/main/kotlin/cafe/adriel/pufferdb/core/PufferDB.kt#L23)
 * Fast (benchmark coming soon™)
-* Works on [Android](#) and [JVM](#)
-* Wrappers for [Coroutines](#) and [RxJava](#)
+* Works on [Android](#android) and [JVM](#core)
+* Wrappers for [Coroutines](#coroutines) and [RxJava](#rxjava)
 * [Simple API](https://github.com/adrielcafe/PufferDB/blob/master/core/src/main/kotlin/cafe/adriel/pufferdb/core/Puffer.kt)
 
 ### Supported types
@@ -32,8 +32,7 @@ So far, PufferDB supports the following types:
 ## Getting Started
 
 ### Import to your project
-1. Add the JitPack repository to your build file
-Add it in your root build.gradle at the end of repositories:
+1. Add the JitPack repository in your root build.gradle at the end of repositories:
 
 ```gradle
 allprojects {
@@ -67,16 +66,17 @@ dependencies {
 
 #### Current version: [![JitPack](https://img.shields.io/jitpack/v/github/adrielcafe/pufferdb.svg?style=flat-square)](https://jitpack.io/#adrielcafe/pufferdb)
 
-### Core (TODO)
+### Core
+**TODO**
 
 
 ### Android
-The Android module contains a `AndroidPufferDB` helper class:
+The Android module contains an `AndroidPufferDB` helper class:
 ```kotlin
 // Returns a default Puffer instance
 val puffer = AndroidPufferDB.withDefault(context)
 
-// Returns a File on Context.filesDir that should be used by Puffer
+// Returns a File on Context.filesDir that should be used to create a Puffer instance
 val pufferFile = AndroidPufferDB.getPufferFile(context, "my.db")
 ```
 
@@ -87,7 +87,7 @@ val pufferFile = File("path/to/puffer/file")
 val puffer = CoroutinePufferDB.with(pufferFile)
 
 puffer.apply {
-    // All methods are suspend functions that runs on Dispachers.IO context
+    // All methods are suspend functions that runs on Dispatchers.IO context
     launch {
         val myValue = get<String>("myKey")
         val myValueWithDefault = get("myKey", "defaultValue")
@@ -120,9 +120,11 @@ puffer.apply {
 
         val myValue = getAsync<String>("myKey").await()
         
-        putSuspend("myOtherKey", 123)
+        // You can use your custom coroutine context...
+        putSuspend("myOtherKey", 123, Dispatchers.Unconfined)
 
-        putAsync("myOtherKey", 123).await()
+        // ... And your custom coroutine scope
+        putAsync("myOtherKey", 123, myActivityScope).await()
     }
 }
 ```
