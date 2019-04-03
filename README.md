@@ -1,8 +1,9 @@
-[![JitPack](https://img.shields.io/jitpack/v/github/adrielcafe/pufferdb.svg?style=flat-square)](https://jitpack.io/#adrielcafe/pufferdb) 
-[![Codacy](https://img.shields.io/codacy/grade/a673b24ba23e4cd1bd1fdc9907aaafd2.svg?style=flat-square)](https://www.codacy.com/app/adriel_cafe/PufferDB) 
-[![Android API](https://img.shields.io/badge/api-14%2B-brightgreen.svg?style=flat-square)](https://android-arsenal.com/api?level=14) 
-[![License MIT](https://img.shields.io/github/license/adrielcafe/pufferdb.svg?style=flat-square)](https://opensource.org/licenses/MIT) 
-[![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg?style=flat-square)](https://ktlint.github.io/) 
+[![JitPack](https://img.shields.io/jitpack/v/github/adrielcafe/pufferdb.svg?style=for-the-badge)](https://jitpack.io/#adrielcafe/pufferdb) 
+[![Android API](https://img.shields.io/badge/api-14%2B-brightgreen.svg?style=for-the-badge)](https://android-arsenal.com/api?level=14) 
+[![Codacy](https://img.shields.io/codacy/grade/a673b24ba23e4cd1bd1fdc9907aaafd2.svg?style=for-the-badge)](https://www.codacy.com/app/adriel_cafe/PufferDB) 
+[![kotlin](https://img.shields.io/github/languages/top/adrielcafe/pufferdb.svg?style=for-the-badge)](https://kotlinlang.org/) 
+[![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg?style=for-the-badge)](https://ktlint.github.io/) 
+[![License MIT](https://img.shields.io/github/license/adrielcafe/pufferdb.svg?style=for-the-badge&color=yellow)](https://opensource.org/licenses/MIT) 
 
 # 🚧 WORK IN PROGRESS 🚧
 This library is currently in pre-alpha and should **not** be used in production. Stable release coming shortly!
@@ -75,12 +76,16 @@ Current version: [![JitPack](https://img.shields.io/jitpack/v/github/adrielcafe/
 ## Core
 As the name suggests, Core is a standalone module and all other modules depends on it.
 
-Its API is similar to `SharedPreferences`:
-
+To create a new `Puffer` instance you must tell which file to use. 
 ```kotlin
 val pufferFile = File("path/to/puffer/file")
 val puffer = PufferDB.with(pufferFile)
+```
 
+If you are on Android, you can use [Context.filesDir](https://developer.android.com/training/data-storage/files#WriteFileInternal) as the parent folder. If you want to save in the external storage remember to [ask for write permission](https://developer.android.com/training/data-storage/files#ExternalStoragePermissions) first.
+
+Its API is similar to `SharedPreferences`:
+```kotlin
 puffer.apply {
     val myValue = get<String>("myKey")
     val myValueWithDefault = get("myKey", "defaultValue")
