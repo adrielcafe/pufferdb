@@ -1,24 +1,24 @@
 [![JitPack](https://img.shields.io/jitpack/v/github/adrielcafe/pufferdb.svg?style=flat-square)](https://jitpack.io/#adrielcafe/pufferdb) 
-[![Android API](https://img.shields.io/badge/API-14%2B-brightgreen.svg?style=flat-square)](https://android-arsenal.com/api?level=14) 
+[![Android API](https://img.shields.io/badge/api-14%2B-brightgreen.svg?style=flat-square)](https://android-arsenal.com/api?level=14) 
 [![License MIT](https://img.shields.io/github/license/adrielcafe/pufferdb.svg?style=flat-square)](https://opensource.org/licenses/MIT) 
 [![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg?style=flat-square)](https://ktlint.github.io/) 
 
-<h1>
-    <img src="https://github.com/adrielcafe/PufferDB/blob/master/logo.png?raw=true" height="100"> PufferDB
-</h1>
+# ![logo](https://github.com/adrielcafe/pufferdb/blob/master/logo.png?raw=true) PufferDB
 
 **PufferDB** is a :zap: key-value database powered by **P**rotocol B**uffer**s (aka [Protobuf](https://developers.google.com/protocol-buffers/)).
 
 The intent of this library is to provide a fast, reliable and Android **independent** storage. Why Android independent? The SharedPreferences and many great third-party libraries (like [Paper](https://github.com/pilgr/Paper/) and [MMKV](https://github.com/Tencent/MMKV/)) requires the Android Context to work (they're Android *dependents*). But if you are like me and want a **kotlin-only data module** (following the principles of [Clean Architecture](https://antonioleiva.com/clean-architecture-android/)), this library is for you!
 
+### About Protobuf
+
 Protocol Buffers are a language-neutral, platform-neutral extensible mechanism for serializing structured data. Compared to JSON, Protobuf files are [smaller and faster](https://auth0.com/blog/beating-json-performance-with-protobuf/) to read/write because it stores data in an [efficient binary format](https://developers.google.com/protocol-buffers/docs/encoding).
 
 ## Features
-* [Thread-safe](https://github.com/adrielcafe/PufferDB/blob/master/core/src/main/kotlin/cafe/adriel/pufferdb/core/PufferDB.kt#L23)
+* [Thread-safe](https://github.com/adrielcafe/pufferdb/blob/master/core/src/main/kotlin/cafe/adriel/pufferdb/core/PufferDB.kt#L23)
 * Fast (benchmark coming soon™)
-* Works on [Android](#android) and [JVM](#core)
+* Works on [Android and JVM](#platform-compatibility)
 * Wrappers for [Coroutines](#coroutines) and [RxJava](#rxjava)
-* Simple API: [Core](https://github.com/adrielcafe/PufferDB/blob/master/core/src/main/kotlin/cafe/adriel/pufferdb/core/Puffer.kt), [Coroutines](https://github.com/adrielcafe/PufferDB/blob/master/coroutines/src/main/kotlin/cafe/adriel/pufferdb/coroutines/CoroutinePuffer.kt), [RxJava](https://github.com/adrielcafe/PufferDB/blob/master/rxjava/src/main/kotlin/cafe/adriel/pufferdb/rxjava/RxPuffer.kt)
+* Simple API: [Core](https://github.com/adrielcafe/pufferdb/blob/master/core/src/main/kotlin/cafe/adriel/pufferdb/core/Puffer.kt), [Coroutines](https://github.com/adrielcafe/pufferdb/blob/master/coroutines/src/main/kotlin/cafe/adriel/pufferdb/coroutines/CoroutinePuffer.kt), [RxJava](https://github.com/adrielcafe/pufferdb/blob/master/rxjava/src/main/kotlin/cafe/adriel/pufferdb/rxjava/RxPuffer.kt)
 
 ### Supported types
 So far, PufferDB supports the following types:
@@ -28,8 +28,6 @@ So far, PufferDB supports the following types:
 - [x] Long
 - [x] Boolean
 - [x] String
-- [ ] Serializable
-- [ ] Parcelable
 
 ## Getting Started
 
@@ -64,9 +62,9 @@ Current version: [![JitPack](https://img.shields.io/jitpack/v/github/adrielcafe/
 ### Platform compatibility
 
 |         | `core` | `android` | `coroutines` | `rxjava` |
-|---------|------|---------|------------|--------|
-| JVM     | ✓    |         | ✓          | ✓      |
-| Android | ✓    | ✓       | ✓          | ✓      |
+|---------|--------|-----------|--------------|----------|
+| Android | ✓      | ✓        | ✓            | ✓       |
+| JVM     | ✓      |           | ✓           | ✓        |
 
 ### Core
 **TODO**
