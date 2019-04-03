@@ -15,8 +15,22 @@ object PufferSpec : Spek({
     val pufferFile by memoized { File.createTempFile("puffer", ".db") }
     val puffer by memoized { PufferDB.with(pufferFile) }
 
-    beforeEachTest {
-        pufferFile.delete()
+    describe("reading/writing files") {
+        it("should throw when try to read an invalid file") {
+            val invalidPufferFile = File("\"invalid_puffer.db\"")
+
+            expectThrows<PufferException> {
+                PufferDB.with(invalidPufferFile)
+            }
+        }
+
+        it("should throw when try to write without permission") {
+            pufferFile.setWritable(false)
+
+            expectThrows<PufferException> {
+                puffer.put(TestData.KEY_DOUBLE, TestData.VALUE_DOUBLE)
+            }
+        }
     }
 
     describe("saving items") {

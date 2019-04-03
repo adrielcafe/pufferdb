@@ -81,14 +81,10 @@ class PufferDB private constructor(private val pufferFile: File) : Puffer {
     }
 
     private fun loadPuffer() = locker.write {
-        if (pufferFile.exists()) {
-            try {
-                PufferProto.parseFrom(pufferFile.inputStream())
-            } catch (e: IOException) {
-                throw PufferException("Unable to read ${pufferFile.path}", e)
-            }
-        } else {
-            PufferProto.getDefaultInstance()
+        try {
+            PufferProto.parseFrom(pufferFile.inputStream())
+        } catch (e: IOException) {
+            throw PufferException("Unable to read ${pufferFile.path}", e)
         }
     }
 
