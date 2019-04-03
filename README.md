@@ -1,5 +1,7 @@
 [![JitPack](https://img.shields.io/jitpack/v/github/adrielcafe/pufferdb.svg?style=for-the-badge)](https://jitpack.io/#adrielcafe/pufferdb) 
 [![Android API](https://img.shields.io/badge/api-14%2B-brightgreen.svg?style=for-the-badge)](https://android-arsenal.com/api?level=14) 
+[![Bitrise](https://img.shields.io/bitrise/9cf30678e9638eba/master.svg?style=for-the-badge&token=-KZNny2tfEouRiyRtPQW7A)](https://app.bitrise.io/app/9cf30678e9638eba) 
+[![Codecov](https://img.shields.io/codecov/c/github/adrielcafe/pufferdb/master.svg?style=for-the-badge)](https://codecov.io/gh/adrielcafe/pufferdb) 
 [![Codacy](https://img.shields.io/codacy/grade/a673b24ba23e4cd1bd1fdc9907aaafd2.svg?style=for-the-badge)](https://www.codacy.com/app/adriel_cafe/pufferdb) 
 [![kotlin](https://img.shields.io/github/languages/top/adrielcafe/pufferdb.svg?style=for-the-badge)](https://kotlinlang.org/) 
 [![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg?style=for-the-badge)](https://ktlint.github.io/) 
