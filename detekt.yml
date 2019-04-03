@@ -13,12 +13,12 @@ test-pattern: # Configure exclusions for test sources
     - 'comments'
   exclude-rules:
     - 'NamingRules'
-    - 'MaxLineLength'
     - 'TooManyFunctions'
-    - 'ForEachOnRange'
     - 'FunctionMaxLength'
     - 'TooGenericExceptionCaught'
     - 'InstanceOfCheckForException'
+    - 'NoItParamInMultilineLambda'
+    - 'NoTrailingSpaces'
 
 build:
   maxIssues: 10

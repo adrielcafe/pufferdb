@@ -1,8 +1,9 @@
 object Version {
-    internal const val GRADLE_ANDROID = "3.4.0-rc02"
+    internal const val GRADLE_ANDROID = "3.4.0-rc03"
     internal const val GRADLE_PROTOBUF = "0.8.8"
     internal const val GRADLE_DETEKT = "1.0.0-RC14"
     internal const val GRADLE_KTLINT = "7.2.1"
+    internal const val GRADLE_JACOCO = "0.13.0"
     internal const val GRADLE_VERSIONS = "0.21.0"
     internal const val GRADLE_ANDROID_MAVEN = "2.1"
 
@@ -21,6 +22,8 @@ object Version {
     internal const val TEST_JUNIT = "4.12"
     internal const val TEST_ESPRESSO = "3.1.1"
     internal const val TEST_RUNNER = "1.1.1"
+    internal const val TEST_SPEK = "2.0.1"
+    internal const val TEST_STRIKT = "0.19.7"
 }
 
 object ProjectLib {
@@ -29,6 +32,7 @@ object ProjectLib {
     const val PROTOBUF = "com.google.protobuf:protobuf-gradle-plugin:${Version.GRADLE_PROTOBUF}"
     const val DETEKT = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:${Version.GRADLE_DETEKT}"
     const val KTLINT = "org.jlleitschuh.gradle:ktlint-gradle:${Version.GRADLE_KTLINT}"
+    const val JACOCO = "com.vanniktech:gradle-android-junit-jacoco-plugin:${Version.GRADLE_JACOCO}"
     const val VERSIONS = "com.github.ben-manes:gradle-versions-plugin:${Version.GRADLE_VERSIONS}"
     const val ANDROID_MAVEN = "com.github.dcendents:android-maven-gradle-plugin:${Version.GRADLE_ANDROID_MAVEN}"
 }
@@ -51,4 +55,7 @@ object TestLib {
     const val JUNIT = "junit:junit:${Version.TEST_JUNIT}"
     const val ESPRESSO = "androidx.test.espresso:espresso-core:${Version.TEST_ESPRESSO}"
     const val RUNNER = "androidx.test:runner:${Version.TEST_RUNNER}"
+    const val SPEK_DSL = "org.spekframework.spek2:spek-dsl-jvm:${Version.TEST_SPEK}"
+    const val SPEK_RUNNER = "org.spekframework.spek2:spek-runner-junit5:${Version.TEST_SPEK}"
+    const val STRIKT = "io.strikt:strikt-core:${Version.TEST_STRIKT}"
 }
