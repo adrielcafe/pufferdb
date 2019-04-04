@@ -18,7 +18,7 @@ object PufferSpec : Spek({
 
     describe("reading/writing files") {
         it("should throw when try to read an invalid file") {
-            val invalidPufferFile = File("\"invalid_puffer.db\"")
+            val invalidPufferFile = File("\"\\0/.db\"")
 
             expectThrows<PufferException> {
                 PufferDB.with(invalidPufferFile)
