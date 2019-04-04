@@ -24,6 +24,7 @@ object Version {
     internal const val TEST_RUNNER = "1.1.1"
     internal const val TEST_SPEK = "2.0.1"
     internal const val TEST_STRIKT = "0.19.7"
+    internal const val TEST_MOCKK = "1.9.3"
 }
 
 object ProjectLib {
@@ -58,4 +59,5 @@ object TestLib {
     const val SPEK_DSL = "org.spekframework.spek2:spek-dsl-jvm:${Version.TEST_SPEK}"
     const val SPEK_RUNNER = "org.spekframework.spek2:spek-runner-junit5:${Version.TEST_SPEK}"
     const val STRIKT = "io.strikt:strikt-core:${Version.TEST_STRIKT}"
+    const val MOCKK = "io.mockk:mockk:${Version.TEST_MOCKK}"
 }

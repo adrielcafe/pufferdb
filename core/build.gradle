@@ -18,6 +18,7 @@ dependencies {
     testImplementation TestLib.SPEK_DSL
     testImplementation TestLib.SPEK_RUNNER
     testImplementation TestLib.STRIKT
+    testImplementation TestLib.MOCKK
 }
 
 test {

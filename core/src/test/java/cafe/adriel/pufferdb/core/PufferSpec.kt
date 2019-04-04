@@ -1,5 +1,7 @@
 package cafe.adriel.pufferdb.core
 
+import io.mockk.every
+import io.mockk.spyk
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 import strikt.api.expectThat
@@ -24,14 +26,14 @@ object PufferSpec : Spek({
             }
         }
 
-        // TODO Its failing only with JaCoCo on Bitrise. Why?!
-//        it("should throw when try to write without permission") {
-//            pufferFile.setReadOnly()
-//
-//            expectThrows<PufferException> {
-//                puffer.put(TestData.KEY_DOUBLE, TestData.VALUE_DOUBLE)
-//            }
-//        }
+        it("should throw when try to write without permission") {
+            val mockPuffer = spyk(puffer, recordPrivateCalls = true)
+            every { mockPuffer invokeNoArgs "saveProto" } throws PufferException("Error")
+
+            expectThrows<PufferException> {
+                mockPuffer.put(TestData.KEY_DOUBLE, TestData.VALUE_DOUBLE)
+            }
+        }
     }
 
     describe("saving items") {

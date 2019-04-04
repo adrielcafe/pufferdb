@@ -21,12 +21,12 @@ class PufferDB private constructor(private val pufferFile: File) : Puffer {
     }
 
     private val locker = ReentrantReadWriteLock()
-    private var puffer = loadPuffer()
+    private var proto = loadProto()
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : Any> get(key: String, defaultValue: T?) = try {
         val protoValue = locker.read {
-            puffer.nestMap.getOrElse(key) { null }
+            proto.nestMap.getOrElse(key) { null }
         }
 
         val value = getValueFromProto(protoValue) as? T
@@ -56,11 +56,11 @@ class PufferDB private constructor(private val pufferFile: File) : Puffer {
     }
 
     override fun getKeys() = locker.read {
-        puffer.nestMap.keys.toSet()
+        proto.nestMap.keys.toSet()
     }
 
     override fun contains(key: String) = locker.read {
-        puffer.containsNest(key)
+        proto.containsNest(key)
     }
 
     override fun remove(key: String) = write {
@@ -68,19 +68,19 @@ class PufferDB private constructor(private val pufferFile: File) : Puffer {
     }
 
     override fun removeAll() = locker.write {
-        puffer = PufferProto.getDefaultInstance()
-        savePuffer()
+        proto = PufferProto.getDefaultInstance()
+        saveProto()
     }
 
     private fun write(action: PufferProto.Builder.() -> Unit) = locker.write {
-        puffer = PufferProto.newBuilder(puffer).run {
+        proto = PufferProto.newBuilder(proto).run {
             action(this)
             build()
         }
-        savePuffer()
+        saveProto()
     }
 
-    private fun loadPuffer() = locker.write {
+    private fun loadProto() = locker.write {
         try {
             PufferProto.parseFrom(pufferFile.inputStream())
         } catch (e: IOException) {
@@ -88,8 +88,8 @@ class PufferDB private constructor(private val pufferFile: File) : Puffer {
         }
     }
 
-    private fun savePuffer() = try {
-        puffer.writeTo(pufferFile.outputStream())
+    private fun saveProto() = try {
+        proto.writeTo(pufferFile.outputStream())
     } catch (e: IOException) {
         throw PufferException("Unable to write in ${pufferFile.path}", e)
     }
