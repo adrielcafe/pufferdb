@@ -1,6 +1,6 @@
 apply plugin: 'kotlin'
 apply plugin: 'com.google.protobuf'
-apply plugin: "com.vanniktech.android.junit.jacoco"
+apply plugin: 'com.vanniktech.android.junit.jacoco'
 apply plugin: 'maven'
 
 group = Maven.GROUP
@@ -13,6 +13,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation ModuleLib.KOTLIN
+    implementation ModuleLib.COROUTINES
     implementation ModuleLib.PROTOBUF_LITE
 
     testImplementation TestLib.SPEK_DSL

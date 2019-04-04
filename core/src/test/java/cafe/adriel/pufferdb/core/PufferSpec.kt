@@ -6,7 +6,6 @@ import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 import strikt.api.expectThat
 import strikt.api.expectThrows
-import strikt.assertions.hasSize
 import strikt.assertions.isEmpty
 import strikt.assertions.isEqualTo
 import strikt.assertions.isFalse
@@ -97,6 +96,16 @@ object PufferSpec : Spek({
                 puffer.get(TestData.KEY_STRING)
             }
         }
+
+        it("should throw when try to get a removed value") {
+            puffer.put(TestData.KEY_STRING, TestData.VALUE_STRING)
+
+            puffer.remove(TestData.KEY_STRING)
+
+            expectThrows<PufferException> {
+                puffer.get(TestData.KEY_STRING)
+            }
+        }
     }
 
     describe("retrieving all keys") {
@@ -106,24 +115,26 @@ object PufferSpec : Spek({
         }
 
         it("should return all keys") {
+            val allKeys = mutableSetOf<String>()
             TestData.ITEMS.forEach {
+                allKeys.add(it.first)
                 puffer.put(it.first, it.second)
             }
 
             val keys = puffer.getKeys()
-            expectThat(keys).hasSize(TestData.ITEMS.size)
+            expectThat(keys).isEqualTo(allKeys)
         }
     }
 
     describe("checking if values exists") {
-        it("should return true") {
+        it("should return true if exists") {
             puffer.put(TestData.KEY_STRING, TestData.VALUE_STRING)
 
             val contains = puffer.contains(TestData.KEY_STRING)
             expectThat(contains).isTrue()
         }
 
-        it("should return false") {
+        it("should return false if not found") {
             val contains = puffer.contains(TestData.KEY_STRING)
             expectThat(contains).isFalse()
         }
@@ -137,16 +148,6 @@ object PufferSpec : Spek({
 
             val contains = puffer.contains(TestData.KEY_STRING)
             expectThat(contains).isFalse()
-        }
-
-        it("should throw when try to get a removed value") {
-            puffer.put(TestData.KEY_STRING, TestData.VALUE_STRING)
-
-            puffer.remove(TestData.KEY_STRING)
-
-            expectThrows<PufferException> {
-                puffer.get(TestData.KEY_STRING)
-            }
         }
 
         it("should remove all items") {

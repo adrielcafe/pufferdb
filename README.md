@@ -84,7 +84,7 @@ val pufferFile = File("path/to/puffer/file")
 val puffer = PufferDB.with(pufferFile)
 ```
 
-If you are on Android, you can use [Context.filesDir](https://developer.android.com/training/data-storage/files#WriteFileInternal) as the parent folder. If you want to save in the external storage remember to [ask for write permission](https://developer.android.com/training/data-storage/files#ExternalStoragePermissions) first.
+If you are on Android, I recommend to use the [Context.filesDir](https://developer.android.com/training/data-storage/files#WriteFileInternal) as the parent folder. If you want to save in the external storage remember to [ask for write permission](https://developer.android.com/training/data-storage/files#ExternalStoragePermissions) first.
 
 Its API is similar to `SharedPreferences`:
 ```kotlin
@@ -108,12 +108,10 @@ puffer.apply {
 }
 ```
 
-But unlike `SharedPreferences`, there's no `apply()` or `commit()`. Changes are saved every time a write operation happens.
-
-PufferDB keeps an immutable and read-only memory cache for fast reads.
+But unlike `SharedPreferences`, there's no `apply()` or `commit()`. Changes are saved asynchronously every time a write operation (`put()`, `remove()` and `removeAll()`) happens.
 
 ### Threading
-PufferDB uses the [`ReentrantReadWriteLock`](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/locks/ReentrantReadWriteLock.html) to ensure thread-safe read-write operations.
+PufferDB uses a [`ConcurrentHashMap`](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ConcurrentHashMap.html) to manage a thread-safe in-memory cache for read and write operations.
 
 You *can* run the API methods on the Android Main Thread, but you *shouldn't* do this! Please, use one of the wrapper modules or built in extension functions instead.
 
