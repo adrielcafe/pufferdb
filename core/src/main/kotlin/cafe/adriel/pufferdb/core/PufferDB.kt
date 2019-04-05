@@ -10,10 +10,14 @@ import cafe.adriel.pufferdb.proto.ValueProto.TypeCase.LONG_VALUE
 import cafe.adriel.pufferdb.proto.ValueProto.TypeCase.STRING_VALUE
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import java.io.File
 import java.io.IOException
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.locks.ReentrantLock
+import kotlin.concurrent.withLock
 
 class PufferDB private constructor(private val pufferFile: File) : Puffer {
 
@@ -21,7 +25,9 @@ class PufferDB private constructor(private val pufferFile: File) : Puffer {
         fun with(pufferFile: File): Puffer = PufferDB(pufferFile)
     }
 
+    private val locker = ReentrantLock()
     private val nest = ConcurrentHashMap<String, Any>()
+    private var job: Job? = null
 
     init {
         loadProto()
@@ -58,12 +64,18 @@ class PufferDB private constructor(private val pufferFile: File) : Puffer {
         saveProto()
     }
 
-    private fun loadProto() = try {
+    private fun loadProto() = locker.withLock {
         val currentNest = if (pufferFile.exists()) {
-            PufferProto
-                .parseFrom(pufferFile.inputStream())
-                .nestMap
-                .mapValues { getValue(it.value) }
+            try {
+                PufferProto
+                    .parseFrom(pufferFile.inputStream())
+                    .nestMap
+                    .mapValues { getValue(it.value) }
+            } catch (e: IOException) {
+                // TODO handle error
+                e.printStackTrace()
+                emptyMap<String, Any>()
+            }
         } else {
             pufferFile.createNewFile()
             emptyMap()
@@ -72,23 +84,22 @@ class PufferDB private constructor(private val pufferFile: File) : Puffer {
             clear()
             putAll(currentNest)
         }
-    } catch (e: IOException) {
-        throw PufferException("Unable to read ${pufferFile.path}", e)
     }
 
-    private fun saveProto() = GlobalScope.async(Dispatchers.IO) {
-        try {
-            val newNest = nest.mapValues {
-                getProtoValue(it.value)
+    private fun saveProto() = locker.withLock {
+        job?.cancel()
+        job = GlobalScope.launch(Dispatchers.IO) {
+            if (isActive) {
+                val newNest = nest.mapValues {
+                    getProtoValue(it.value)
+                }
+                PufferProto.newBuilder()
+                    .putAllNest(newNest)
+                    .build()
+                    .writeTo(pufferFile.outputStream())
             }
-            PufferProto.newBuilder()
-                .putAllNest(newNest)
-                .build()
-                .writeTo(pufferFile.outputStream())
-        } catch (e: IOException) {
-            throw PufferException("Unable to write in ${pufferFile.path}", e)
         }
-    }.start()
+    }
 
     private fun isTypeSupported(value: Any?) = when (value) {
         is Double, is Float, is Int, is Long, is Boolean, is String -> true
