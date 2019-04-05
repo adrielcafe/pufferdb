@@ -33,7 +33,7 @@ object PufferSpec : Spek({
                     puffer.put(it.first, it.second)
                 }
                 // TODO Try to avoid this explicit delay
-                delay(100)
+                delay(1000)
             }
 
             val newPuffer = PufferDB.with(pufferFile)
