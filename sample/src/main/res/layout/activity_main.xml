@@ -10,6 +10,7 @@
     <ImageView
         android:id="@+id/vLogo"
         android:layout_width="match_parent"
+        android:layout_marginTop="-30dp"
         android:layout_height="250dp"
         android:src="@drawable/ic_launcher_foreground"/>
 
@@ -37,6 +38,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/run_rx"/>
+
+
+        <Button
+            android:id="@+id/vRunBenchmark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/run_benchmark"/>
 
     </LinearLayout>
 

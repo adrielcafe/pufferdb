@@ -6,7 +6,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "cafe.adriel.pufferdb.sample"
-        minSdkVersion 14
+        minSdkVersion 16
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -38,6 +38,9 @@ dependencies {
     implementation ModuleLib.COROUTINES
     implementation ModuleLib.RXJAVA
     implementation ModuleLib.RXANDROID
+    implementation ModuleLib.MMKV
+    implementation ModuleLib.PAPER
+    implementation ModuleLib.HAWK
 
     testImplementation TestLib.JUNIT
     androidTestImplementation TestLib.ESPRESSO

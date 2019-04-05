@@ -237,3 +237,17 @@ puffer.apply {
     }
 }
 ```
+
+## Benchmark
+
+|  | Write 1k strings (ms) | Read 1k strings (ms) |
+|-------------------|-----------------------|----------------------|
+| **PufferDB** | **81** | **9** |
+| SharedPreferences | 461 | 7 |
+| MMKV | 15 | 9 |
+| Paper | 738 | 211 |
+| Hawk | 11450 | 214 |
+
+*Tested on Moto Z2 Plus.*
+
+You can run the [Benchmark](https://github.com/adrielcafe/PufferDB/blob/master/sample/src/main/kotlin/cafe/adriel/pufferdb/sample/Benchmark.kt) through the sample app.

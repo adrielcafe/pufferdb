@@ -5,4 +5,5 @@
     <string name="run_core">Run Core</string>
     <string name="run_coroutine">Run Coroutine</string>
     <string name="run_rx">Run Rx</string>
+    <string name="run_benchmark">Run Benchmark</string>
 </resources>

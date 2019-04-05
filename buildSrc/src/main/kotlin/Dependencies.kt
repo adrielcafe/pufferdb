@@ -13,6 +13,10 @@ object Version {
     internal const val RXJAVA = "2.2.8"
     internal const val RXANDROID = "2.1.1"
 
+    internal const val MMKV = "1.0.18"
+    internal const val PAPER = "2.6"
+    internal const val HAWK = "2.0.1"
+
     internal const val APP_COMPAT = "1.1.0-alpha03"
 
     internal const val PROTOBUF_LITE = "3.0.1"
@@ -44,6 +48,10 @@ object ModuleLib {
 
     const val RXJAVA = "io.reactivex.rxjava2:rxjava:${Version.RXJAVA}"
     const val RXANDROID = "io.reactivex.rxjava2:rxandroid:${Version.RXANDROID}"
+
+    const val MMKV = "com.tencent:mmkv:${Version.MMKV}"
+    const val PAPER = "io.paperdb:paperdb:${Version.PAPER}"
+    const val HAWK = "com.orhanobut:hawk:${Version.HAWK}"
 
     const val APP_COMPAT = "androidx.appcompat:appcompat:${Version.APP_COMPAT}"
 

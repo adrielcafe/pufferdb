@@ -54,6 +54,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         vRunCore.setOnClickListener(this)
         vRunCoroutine.setOnClickListener(this)
         vRunRx.setOnClickListener(this)
+        vRunBenchmark.setOnClickListener(this)
 
         vLogo.startAnimation(AnimationUtils.loadAnimation(this, R.anim.floating))
     }
@@ -63,6 +64,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
             R.id.vRunCore -> runCore()
             R.id.vRunCoroutine -> runCoroutine()
             R.id.vRunRx -> runRx()
+            R.id.vRunBenchmark -> Benchmark(this).run()
         }
         Toast.makeText(this, R.string.look_logs, Toast.LENGTH_SHORT).show()
     }
