@@ -11,25 +11,35 @@ import cafe.adriel.pufferdb.proto.ValueProto.TypeCase.STRING_VALUE
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.consumeEach
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.IOException
 import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.locks.ReentrantLock
-import kotlin.concurrent.withLock
 
 class PufferDB private constructor(private val pufferFile: File) : Puffer {
 
     companion object {
+        private const val WRITE_DELAY = 20L // ms
+
         fun with(pufferFile: File): Puffer = PufferDB(pufferFile)
     }
 
-    private val locker = ReentrantLock()
     private val nest = ConcurrentHashMap<String, Any>()
-    private var job: Job? = null
+
+    private val writeChannel = Channel<Unit>(Channel.CONFLATED)
+    private var writeJob: Job? = null
 
     init {
+        GlobalScope.launch(Dispatchers.Default) {
+            writeChannel.consumeEach {
+                saveProto()
+            }
+        }
+
         loadProto()
     }
 
@@ -44,7 +54,7 @@ class PufferDB private constructor(private val pufferFile: File) : Puffer {
     override fun <T : Any> put(key: String, value: T) {
         if (isTypeSupported(value)) {
             nest[key] = value
-            saveProto()
+            writeChannel.offer(Unit)
         } else {
             throw PufferException("${value::class.java.name} is not supported")
         }
@@ -56,21 +66,21 @@ class PufferDB private constructor(private val pufferFile: File) : Puffer {
 
     override fun remove(key: String) {
         nest.remove(key)
-        saveProto()
+        writeChannel.offer(Unit)
     }
 
     override fun removeAll() {
         nest.clear()
-        saveProto()
+        writeChannel.offer(Unit)
     }
 
-    private fun loadProto() = locker.withLock {
+    private fun loadProto() {
         val currentNest = try {
             if (pufferFile.exists()) {
-                    PufferProto
-                        .parseFrom(pufferFile.inputStream())
-                        .nestMap
-                        .mapValues { getValue(it.value) }
+                PufferProto
+                    .parseFrom(pufferFile.inputStream())
+                    .nestMap
+                    .mapValues { getValue(it.value) }
             } else {
                 pufferFile.createNewFile()
                 emptyMap()
@@ -84,17 +94,23 @@ class PufferDB private constructor(private val pufferFile: File) : Puffer {
         }
     }
 
-    private fun saveProto() = locker.withLock {
-        job?.cancel()
-        job = GlobalScope.launch(Dispatchers.IO) {
+    private fun saveProto() {
+        writeJob?.cancel()
+        writeJob = GlobalScope.launch(Dispatchers.IO) {
             if (isActive) {
+                // TODO Try to avoid this explicit delay
+                delay(WRITE_DELAY)
                 val newNest = nest.mapValues {
                     getProtoValue(it.value)
                 }
-                PufferProto.newBuilder()
-                    .putAllNest(newNest)
-                    .build()
-                    .writeTo(pufferFile.outputStream())
+                try {
+                    PufferProto.newBuilder()
+                        .putAllNest(newNest)
+                        .build()
+                        .writeTo(pufferFile.outputStream())
+                } catch (e: IOException) {
+                    throw PufferException("Unable to write in ${pufferFile.path}", e)
+                }
             }
         }
     }
@@ -104,21 +120,17 @@ class PufferDB private constructor(private val pufferFile: File) : Puffer {
         else -> false
     }
 
-    private fun getValue(value: ValueProto?): Any = when (value?.typeCase) {
+    private fun getValue(value: ValueProto): Any = when (value.typeCase) {
         DOUBLE_VALUE -> value.doubleValue
         FLOAT_VALUE -> value.floatValue
         INT_VALUE -> value.intValue
         LONG_VALUE -> value.longValue
         BOOL_VALUE -> value.boolValue
         STRING_VALUE -> value.stringValue
-        else -> if (value == null) {
-            throw PufferException("Value cannot be null")
-        } else {
-            throw PufferException("No value found")
-        }
+        else -> throw PufferException("No value found")
     }
 
-    private fun getProtoValue(value: Any?) = ValueProto.newBuilder()
+    private fun getProtoValue(value: Any) = ValueProto.newBuilder()
         .also { builder ->
             when (value) {
                 is Double -> builder.doubleValue = value
@@ -127,11 +139,6 @@ class PufferDB private constructor(private val pufferFile: File) : Puffer {
                 is Long -> builder.longValue = value
                 is Boolean -> builder.boolValue = value
                 is String -> builder.stringValue = value
-                else -> if (value == null) {
-                    throw PufferException("Value cannot be null")
-                } else {
-                    throw PufferException("${value::class.java.name} is not supported")
-                }
             }
         }
         .build()

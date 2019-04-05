@@ -20,6 +20,9 @@ object TestData {
     val VALUE_SERIALIZABLE = TestSerializable()
 
     val ITEMS = setOf(
+        TestData.KEY_DOUBLE to TestData.VALUE_DOUBLE,
+        TestData.KEY_FLOAT to TestData.VALUE_FLOAT,
+        TestData.KEY_INT to TestData.VALUE_INT,
         TestData.KEY_LONG to TestData.VALUE_LONG,
         TestData.KEY_BOOLEAN to TestData.VALUE_BOOLEAN,
         TestData.KEY_STRING to TestData.VALUE_STRING

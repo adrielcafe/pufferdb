@@ -1,7 +1,7 @@
 package cafe.adriel.pufferdb.core
 
-import io.mockk.every
-import io.mockk.spyk
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 import strikt.api.expectThat
@@ -17,22 +17,39 @@ object PufferSpec : Spek({
     val puffer by memoized { PufferDB.with(pufferFile) }
 
     describe("reading/writing files") {
-        it("should throw when try to read an invalid file") {
-            val invalidPufferFile = File("\"\\0/.db\"")
+        it("should throw when read an invalid file") {
+            val invalidPufferFile = File("\"/.db\"")
 
             expectThrows<PufferException> {
                 PufferDB.with(invalidPufferFile)
             }
         }
 
-        it("should throw when try to write without permission") {
-            val mockPuffer = spyk(puffer, recordPrivateCalls = true)
-            every { mockPuffer invokeNoArgs "saveProto" } throws PufferException("Error")
-
-            expectThrows<PufferException> {
-                mockPuffer.put(TestData.KEY_DOUBLE, TestData.VALUE_DOUBLE)
+        it("should load a valid file") {
+            val allKeys = mutableSetOf<String>()
+            runBlocking {
+                TestData.ITEMS.forEach {
+                    allKeys.add(it.first)
+                    puffer.put(it.first, it.second)
+                }
+                // TODO Try to avoid this explicit delay
+                delay(100)
             }
+
+            val newPuffer = PufferDB.with(pufferFile)
+
+            expectThat(newPuffer.getKeys()).isEqualTo(allKeys)
         }
+
+        it("should create a new file if it does not exists") {
+            pufferFile.delete()
+
+            PufferDB.with(pufferFile)
+
+            expectThat(pufferFile.exists()).isTrue()
+        }
+
+        // TODO Add more tests
     }
 
     describe("saving items") {
