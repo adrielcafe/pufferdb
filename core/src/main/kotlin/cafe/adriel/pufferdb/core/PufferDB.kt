@@ -65,22 +65,20 @@ class PufferDB private constructor(private val pufferFile: File) : Puffer {
     }
 
     private fun loadProto() = locker.withLock {
-        val currentNest = if (pufferFile.exists()) {
-            try {
-                PufferProto
-                    .parseFrom(pufferFile.inputStream())
-                    .nestMap
-                    .mapValues { getValue(it.value) }
-            } catch (e: IOException) {
-                // TODO handle error
-                e.printStackTrace()
-                emptyMap<String, Any>()
+        val currentNest = try {
+            if (pufferFile.exists()) {
+                    PufferProto
+                        .parseFrom(pufferFile.inputStream())
+                        .nestMap
+                        .mapValues { getValue(it.value) }
+            } else {
+                pufferFile.createNewFile()
+                emptyMap()
             }
-        } else {
-            pufferFile.createNewFile()
-            emptyMap()
+        } catch (e: IOException) {
+            throw PufferException("Unable to read ${pufferFile.path}", e)
         }
-        nest.apply {
+        nest.run {
             clear()
             putAll(currentNest)
         }
