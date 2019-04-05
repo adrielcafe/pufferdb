@@ -23,7 +23,7 @@ Why Android independent? The [SharedPreferences](https://developer.android.com/r
 Protocol Buffers are a language-neutral, platform-neutral extensible mechanism for serializing structured data. Compared to JSON, Protobuf files are [smaller and faster](https://auth0.com/blog/beating-json-performance-with-protobuf/) to read/write because it stores data in an [efficient binary format](https://developers.google.com/protocol-buffers/docs/encoding).
 
 ## Features
-* Fast (benchmark coming soon™)
+* [Fast](#benchmark)
 * Works on [Android and JVM](#platform-compatibility)
 * [Simple API](#core)
 * [Thread-safe](#threading)
