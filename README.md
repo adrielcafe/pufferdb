@@ -8,7 +8,7 @@
 [![License MIT](https://img.shields.io/github/license/adrielcafe/pufferdb.svg?style=for-the-badge&color=yellow)](https://opensource.org/licenses/MIT) 
 
 # 🚧 WORK IN PROGRESS 🚧
-This library is currently in pre-alpha and should **not** be used in production. Stable release coming shortly!
+This library is currently in beta and should **not** be used in production. Stable release coming shortly!
 
 # ![logo](https://github.com/adrielcafe/pufferdb/blob/master/logo.png?raw=true) PufferDB
 
