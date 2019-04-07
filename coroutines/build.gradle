@@ -11,7 +11,7 @@ dependencies {
     implementation project(":core")
 
     implementation ModuleLib.KOTLIN
-    implementation ModuleLib.COROUTINES
+    implementation ModuleLib.COROUTINES_CORE
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8

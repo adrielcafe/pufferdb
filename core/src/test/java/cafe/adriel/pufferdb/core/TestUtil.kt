@@ -2,7 +2,10 @@ package cafe.adriel.pufferdb.core
 
 import java.io.Serializable
 
-object TestData {
+object TestUtil {
+    // TODO Try to avoid this explicit delay
+    const val CHANNEL_DELAY = 1000L
+
     const val KEY_DOUBLE = "doubleValue"
     const val KEY_FLOAT = "floatValue"
     const val KEY_INT = "intValue"
@@ -19,13 +22,13 @@ object TestData {
     const val VALUE_STRING = "Hello Puffer!"
     val VALUE_SERIALIZABLE = TestSerializable()
 
-    val ITEMS = setOf(
-        TestData.KEY_DOUBLE to TestData.VALUE_DOUBLE,
-        TestData.KEY_FLOAT to TestData.VALUE_FLOAT,
-        TestData.KEY_INT to TestData.VALUE_INT,
-        TestData.KEY_LONG to TestData.VALUE_LONG,
-        TestData.KEY_BOOLEAN to TestData.VALUE_BOOLEAN,
-        TestData.KEY_STRING to TestData.VALUE_STRING
+    val ALL_SUPPORTED_TYPES = setOf(
+        KEY_DOUBLE to VALUE_DOUBLE,
+        KEY_FLOAT to VALUE_FLOAT,
+        KEY_INT to VALUE_INT,
+        KEY_LONG to VALUE_LONG,
+        KEY_BOOLEAN to VALUE_BOOLEAN,
+        KEY_STRING to VALUE_STRING
     )
 
     class TestSerializable : Serializable

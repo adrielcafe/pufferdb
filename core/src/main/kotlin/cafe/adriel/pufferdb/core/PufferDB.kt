@@ -11,11 +11,15 @@ import cafe.adriel.pufferdb.proto.ValueProto.TypeCase.STRING_VALUE
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.consumeEach
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.IOException
 import java.util.concurrent.ConcurrentHashMap
@@ -23,21 +27,22 @@ import java.util.concurrent.ConcurrentHashMap
 class PufferDB private constructor(private val pufferFile: File) : Puffer {
 
     companion object {
-        private const val WRITE_DELAY = 20L // ms
-
         fun with(pufferFile: File): Puffer = PufferDB(pufferFile)
     }
 
     private val nest = ConcurrentHashMap<String, Any>()
 
     private val writeChannel = Channel<Unit>(Channel.CONFLATED)
+    private val writeMutex = Mutex()
     private var writeJob: Job? = null
 
     init {
-        GlobalScope.launch(Dispatchers.Default) {
-            writeChannel.consumeEach {
-                saveProto()
-            }
+        GlobalScope.launch(Dispatchers.Main) {
+            /**
+             * TODO Use Flow when became stable
+             * https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-flow/
+             */
+            writeChannel.consumeEach { saveProto() }
         }
 
         loadProto()
@@ -80,7 +85,12 @@ class PufferDB private constructor(private val pufferFile: File) : Puffer {
                 PufferProto
                     .parseFrom(pufferFile.inputStream())
                     .nestMap
-                    .mapValues { getValue(it.value) }
+                    // Transform to a null-safe map
+                    .mapNotNull { mapEntry ->
+                        val value = getValue(mapEntry.value)
+                        if (value == null) null else mapEntry.key to value
+                    }
+                    .toMap()
             } else {
                 pufferFile.createNewFile()
                 emptyMap()
@@ -94,24 +104,31 @@ class PufferDB private constructor(private val pufferFile: File) : Puffer {
         }
     }
 
-    private fun saveProto() {
+    private suspend fun saveProto() = coroutineScope {
         writeJob?.cancel()
-        writeJob = GlobalScope.launch(Dispatchers.IO) {
-            if (isActive) {
-                // TODO Try to avoid this explicit delay
-                delay(WRITE_DELAY)
-                val newNest = nest.mapValues {
-                    getProtoValue(it.value)
-                }
-                try {
-                    PufferProto.newBuilder()
-                        .putAllNest(newNest)
-                        .build()
-                        .writeTo(pufferFile.outputStream())
-                } catch (e: IOException) {
-                    throw PufferException("Unable to write in ${pufferFile.path}", e)
+        writeJob = async {
+            writeMutex.withLock {
+                if (isActive) {
+                    val newNest = nest.mapValues {
+                        getProtoValue(it.value)
+                    }
+                    saveProtoFile(newNest)
                 }
             }
+        }
+    }
+
+    private suspend fun saveProtoFile(newNest: Map<String, ValueProto>) = withContext(Dispatchers.IO) {
+        try {
+            if (!pufferFile.canWrite()) {
+                throw IOException("Missing write permission")
+            }
+            PufferProto.newBuilder()
+                .putAllNest(newNest)
+                .build()
+                .writeTo(pufferFile.outputStream())
+        } catch (e: IOException) {
+            throw PufferException("Unable to write in ${pufferFile.path}", e)
         }
     }
 
@@ -120,14 +137,14 @@ class PufferDB private constructor(private val pufferFile: File) : Puffer {
         else -> false
     }
 
-    private fun getValue(value: ValueProto): Any = when (value.typeCase) {
+    private fun getValue(value: ValueProto): Any? = when (value.typeCase) {
         DOUBLE_VALUE -> value.doubleValue
         FLOAT_VALUE -> value.floatValue
         INT_VALUE -> value.intValue
         LONG_VALUE -> value.longValue
         BOOL_VALUE -> value.boolValue
         STRING_VALUE -> value.stringValue
-        else -> throw PufferException("No value found")
+        else -> null
     }
 
     private fun getProtoValue(value: Any) = ValueProto.newBuilder()

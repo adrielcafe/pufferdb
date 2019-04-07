@@ -35,7 +35,7 @@ dependencies {
 
     implementation ModuleLib.APP_COMPAT
     implementation ModuleLib.KOTLIN
-    implementation ModuleLib.COROUTINES
+    implementation ModuleLib.COROUTINES_ANDROID
     implementation ModuleLib.RXJAVA
     implementation ModuleLib.RXANDROID
     implementation ModuleLib.MMKV

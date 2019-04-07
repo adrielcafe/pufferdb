@@ -29,6 +29,7 @@ object Version {
     internal const val TEST_SPEK = "2.0.1"
     internal const val TEST_STRIKT = "0.19.7"
     internal const val TEST_MOCKK = "1.9.3"
+    internal const val TEST_COROUTINES = "1.2.0-alpha-2"
 }
 
 object ProjectLib {
@@ -44,7 +45,8 @@ object ProjectLib {
 
 object ModuleLib {
     const val KOTLIN = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${Version.KOTLIN}"
-    const val COROUTINES = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Version.COROUTINES}"
+    const val COROUTINES_CORE = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Version.COROUTINES}"
+    const val COROUTINES_ANDROID = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Version.COROUTINES}"
 
     const val RXJAVA = "io.reactivex.rxjava2:rxjava:${Version.RXJAVA}"
     const val RXANDROID = "io.reactivex.rxjava2:rxandroid:${Version.RXANDROID}"
@@ -68,4 +70,5 @@ object TestLib {
     const val SPEK_RUNNER = "org.spekframework.spek2:spek-runner-junit5:${Version.TEST_SPEK}"
     const val STRIKT = "io.strikt:strikt-core:${Version.TEST_STRIKT}"
     const val MOCKK = "io.mockk:mockk:${Version.TEST_MOCKK}"
+    const val COROUTINES = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Version.TEST_COROUTINES}"
 }

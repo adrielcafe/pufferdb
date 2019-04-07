@@ -13,13 +13,14 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation ModuleLib.KOTLIN
-    implementation ModuleLib.COROUTINES
+    implementation ModuleLib.COROUTINES_CORE
     implementation ModuleLib.PROTOBUF_LITE
 
     testImplementation TestLib.SPEK_DSL
     testImplementation TestLib.SPEK_RUNNER
     testImplementation TestLib.STRIKT
     testImplementation TestLib.MOCKK
+    testImplementation TestLib.COROUTINES
 }
 
 test {

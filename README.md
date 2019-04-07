@@ -111,7 +111,9 @@ puffer.apply {
 But unlike `SharedPreferences`, there's no `apply()` or `commit()`. Changes are saved asynchronously every time a write operation (`put()`, `remove()` and `removeAll()`) happens.
 
 ### Threading
-PufferDB uses a [`ConcurrentHashMap`](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ConcurrentHashMap.html) to manage a thread-safe in-memory cache for read and write operations.
+PufferDB uses a [`ConcurrentHashMap`](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ConcurrentHashMap.html) to manage a thread-safe in-memory cache for fast read and write operations.
+
+Changes are saved asynchronously with the help of a [Conflated Channel](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-channel/index.html) (to save the most recent state in a race condition) and [Mutex](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.sync/-mutex/index.html) lock (to prevent simultaneous writes).
 
 You *can* run the API methods on the Android Main Thread, but you *shouldn't* do this! Please, use one of the wrapper modules or built in extension functions instead.
 
@@ -242,12 +244,12 @@ puffer.apply {
 
 |  | Write 1k strings (ms) | Read 1k strings (ms) |
 |-------------------|-----------------------|----------------------|
-| **PufferDB** | **81** | **9** |
-| SharedPreferences | 461 | 7 |
+| **PufferDB** | **45** | **6** |
+| SharedPreferences | 268 | 7 |
 | MMKV | 15 | 9 |
-| Paper | 738 | 211 |
-| Hawk | 11450 | 214 |
+| Paper | 648 | 183 |
+| Hawk | 11116 | 211 |
 
-*Tested on Moto Z2 Plus.*
+*Tested on Moto Z2 Plus*
 
 You can run the [Benchmark](https://github.com/adrielcafe/PufferDB/blob/master/sample/src/main/kotlin/cafe/adriel/pufferdb/sample/Benchmark.kt) through the sample app.
