@@ -115,7 +115,7 @@ PufferDB uses a [`ConcurrentHashMap`](https://docs.oracle.com/javase/8/docs/api/
 
 Changes are saved asynchronously with the help of a [Conflated Channel](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-channel/index.html) (to save the most recent state in a race condition) and [Mutex](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.sync/-mutex/index.html) lock (to prevent simultaneous writes).
 
-You *can* run the API methods on the Android Main Thread, but you *shouldn't* do this! Please, use one of the wrapper modules or built in extension functions instead.
+It is possible to run the API methods on the Android Main Thread, but you should *avoid that*. You can use one of the wrapper modules or built in extension functions for that.
 
 ## Android
 The Android module contains an `AndroidPufferDB` helper class:
