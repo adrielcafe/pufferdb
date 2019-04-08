@@ -12,11 +12,11 @@ object AndroidPufferDB {
 
     fun withDefault(context: Context): Puffer {
         if (!::defaultInstance.isInitialized) {
-            val pufferFile = getPufferFile(context, DEFAULT_FILE_NAME)
+            val pufferFile = getInternalFile(context, DEFAULT_FILE_NAME)
             defaultInstance = PufferDB.with(pufferFile)
         }
         return defaultInstance
     }
 
-    fun getPufferFile(context: Context, fileName: String) = File(context.filesDir, fileName)
+    fun getInternalFile(context: Context, fileName: String) = File(context.filesDir, fileName)
 }

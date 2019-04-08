@@ -20,7 +20,7 @@ Why Android independent? The [SharedPreferences](https://developer.android.com/r
 
 ### About Protobuf
 
-Protocol Buffers are a language-neutral, platform-neutral extensible mechanism for serializing structured data. Compared to JSON, Protobuf files are [smaller and faster](https://auth0.com/blog/beating-json-performance-with-protobuf/) to read/write because it stores data in an [efficient binary format](https://developers.google.com/protocol-buffers/docs/encoding).
+Protocol Buffers are a language-neutral, platform-neutral extensible mechanism for serializing structured data. Compared to JSON, Protobuf files are [smaller and faster](https://auth0.com/blog/beating-json-performance-with-protobuf/) to read/write because the data is stored in an [efficient binary format](https://developers.google.com/protocol-buffers/docs/encoding).
 
 ## Features
 * [Fast](#benchmark)
@@ -120,11 +120,11 @@ It is possible to run the API methods on the Android Main Thread, but you should
 ## Android
 The Android module contains an `AndroidPufferDB` helper class:
 ```kotlin
-// Returns a default Puffer instance
+// Returns a default Puffer instance, the file is located on Context.filesDir
 val puffer = AndroidPufferDB.withDefault(context)
 
 // Returns a File on Context.filesDir that should be used to create a Puffer instance
-val pufferFile = AndroidPufferDB.getPufferFile(context, "my.db")
+val pufferFile = AndroidPufferDB.getInternalFile(context, "my.db")
 ```
 
 ## Coroutines

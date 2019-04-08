@@ -51,11 +51,11 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         AndroidPufferDB.withDefault(this)
     }
     private val pufferCoroutine by lazy {
-        val pufferFile = AndroidPufferDB.getPufferFile(this, "puffer_coroutines.db")
+        val pufferFile = AndroidPufferDB.getInternalFile(this, "puffer_coroutines.db")
         CoroutinePufferDB.with(pufferFile)
     }
     private val pufferRx by lazy {
-        val pufferFile = AndroidPufferDB.getPufferFile(this, "puffer_rx.db")
+        val pufferFile = AndroidPufferDB.getInternalFile(this, "puffer_rx.db")
         RxPufferDB.with(pufferFile)
     }
 
