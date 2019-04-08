@@ -261,7 +261,7 @@ puffer.apply {
 | [SharedPreferences](https://developer.android.com/training/data-storage/shared-preferences) | 267 | 8 |
 | [MMKV](https://github.com/Tencent/MMKV) | 15 | 11 |
 | [Paper](https://github.com/pilgr/Paper) | 842 | 184 |
-| [Binary Prefs](https://github.com/yandextaxitech/binaryprefs) Prefs | 73 | 8 |
+| [Binary Prefs](https://github.com/yandextaxitech/binaryprefs) | 73 | 8 |
 | [Hawk](https://github.com/orhanobut/hawk) | 13716 | 214 |
 
 *Tested on Moto Z2 Plus*
