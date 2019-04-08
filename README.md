@@ -12,7 +12,7 @@ This library is currently in beta and should **not** be used in production. Stab
 
 # ![logo](https://github.com/adrielcafe/pufferdb/blob/master/logo.png?raw=true) PufferDB
 
-**PufferDB** is a :zap: key-value database powered by **P**rotocol B**uffer**s (aka [Protobuf](https://developers.google.com/protocol-buffers/)).
+**PufferDB** is a :zap: key-value database powered by **P**rotocol B**uffer**s (aka [Protobuf](https://developers.google.com/protocol-buffers/)) and [Coroutines](https://kotlinlang.org/docs/reference/coroutines-overview.html).
 
 The purpose of this library is to provide an efficient, reliable and **Android independent** storage. 
 
@@ -111,20 +111,34 @@ puffer.apply {
 But unlike `SharedPreferences`, there's no `apply()` or `commit()`. Changes are saved asynchronously every time a write operation (`put()`, `remove()` and `removeAll()`) happens.
 
 ### Threading
-PufferDB uses a [`ConcurrentHashMap`](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ConcurrentHashMap.html) to manage a thread-safe in-memory cache for fast read and write operations.
+PufferDB uses a [ConcurrentHashMap](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ConcurrentHashMap.html) to manage a thread-safe in-memory cache for fast read and write operations.
 
-Changes are saved asynchronously with the help of a [Conflated Channel](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-channel/index.html) (to save the most recent state in a race condition) and [Mutex](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.sync/-mutex/index.html) lock (to prevent simultaneous writes).
+Changes are saved asynchronously with the help of a [Conflated Channel](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-channel/index.html) (to save the most recent state in a race condition) and [Mutex](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.sync/-mutex/index.html) locker (to prevent simultaneous writes).
 
 It is possible to run the API methods on the Android Main Thread, but you should *avoid that*. You can use one of the wrapper modules or built in extension functions for that.
 
 ## Android
 The Android module contains an `AndroidPufferDB` helper class:
 ```kotlin
-// Returns a default Puffer instance, the file is located on Context.filesDir
-val puffer = AndroidPufferDB.withDefault(context)
+class MyApp : Application() {
 
-// Returns a File on Context.filesDir that should be used to create a Puffer instance
-val pufferFile = AndroidPufferDB.getInternalFile(context, "my.db")
+    override fun onCreate() {
+        super.onCreate()
+        // Init the PufferDB when your app starts
+        AndroidPufferDB.init(this)
+    }
+}
+
+// Now you can use it anywhere in your app
+class MyActivity : AppCompatActivity() {
+
+    // Returns a default Puffer instance, the file is located on Context.filesDir
+    val corePuffer = AndroidPufferDB.withDefault()
+
+    // Returns a File that should be used to create a Puffer instance
+    val pufferFile = AndroidPufferDB.getInternalFile("my.db")
+    val coroutinePuffer = CoroutinePufferDB.with(pufferFile)
+}
 ```
 
 ## Coroutines

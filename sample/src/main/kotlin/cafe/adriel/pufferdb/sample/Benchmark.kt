@@ -18,7 +18,7 @@ class Benchmark(context: Context) {
     private val keys = Array(REPEAT_COUNT) { "Key $it" }
     private val values = Array(REPEAT_COUNT) { "Value $it" }
 
-    private val puffer = AndroidPufferDB.withDefault(context)
+    private val puffer = AndroidPufferDB.withDefault()
     private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
     private val mmkv = MMKV.defaultMMKV()
     private val paper = Paper.book()
