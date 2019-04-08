@@ -15,6 +15,8 @@ The purpose of this library is to provide an efficient, reliable and **Android i
 
 Why Android independent? The [SharedPreferences](https://developer.android.com/reference/android/content/SharedPreferences) and many great third-party libraries (like [Paper](https://github.com/pilgr/Paper/) and [MMKV](https://github.com/Tencent/MMKV/)) requires the Android Context to work. But if you are like me and want a **kotlin-only data module** (following the principles of [Clean Architecture](https://antonioleiva.com/clean-architecture-android/)), this library is for you!
 
+This project started as a library module in one of my personal projects, but I decided to open source it and add more features for general use. Hope you like!
+
 ### About Protobuf
 
 Protocol Buffers are a language-neutral, platform-neutral extensible mechanism for serializing structured data. Compared to JSON, Protobuf files are [smaller and faster](https://auth0.com/blog/beating-json-performance-with-protobuf/) to read/write because the data is stored in an [efficient binary format](https://developers.google.com/protocol-buffers/docs/encoding).
