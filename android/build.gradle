@@ -31,8 +31,4 @@ dependencies {
 
     implementation ModuleLib.APP_COMPAT
     implementation ModuleLib.KOTLIN
-
-    testImplementation TestLib.JUNIT
-    androidTestImplementation TestLib.ESPRESSO
-    androidTestImplementation TestLib.RUNNER
 }

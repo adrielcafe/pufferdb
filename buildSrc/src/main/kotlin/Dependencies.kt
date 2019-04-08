@@ -17,19 +17,15 @@ object Version {
     internal const val PAPER = "2.6"
     internal const val HAWK = "2.0.1"
 
-    internal const val APP_COMPAT = "1.1.0-alpha03"
+    internal const val APP_COMPAT = "1.1.0-alpha04"
 
     internal const val PROTOBUF_LITE = "3.0.1"
     internal const val PROTOC = "3.7.1"
     internal const val PROTOC_LITE = "3.0.0"
 
-    internal const val TEST_JUNIT = "4.12"
-    internal const val TEST_ESPRESSO = "3.1.1"
-    internal const val TEST_RUNNER = "1.1.1"
     internal const val TEST_SPEK = "2.0.1"
     internal const val TEST_STRIKT = "0.19.7"
     internal const val TEST_MOCKK = "1.9.3"
-    internal const val TEST_COROUTINES = "1.2.0-alpha-2"
 }
 
 object ProjectLib {
@@ -63,12 +59,9 @@ object ModuleLib {
 }
 
 object TestLib {
-    const val JUNIT = "junit:junit:${Version.TEST_JUNIT}"
-    const val ESPRESSO = "androidx.test.espresso:espresso-core:${Version.TEST_ESPRESSO}"
-    const val RUNNER = "androidx.test:runner:${Version.TEST_RUNNER}"
     const val SPEK_DSL = "org.spekframework.spek2:spek-dsl-jvm:${Version.TEST_SPEK}"
     const val SPEK_RUNNER = "org.spekframework.spek2:spek-runner-junit5:${Version.TEST_SPEK}"
     const val STRIKT = "io.strikt:strikt-core:${Version.TEST_STRIKT}"
     const val MOCKK = "io.mockk:mockk:${Version.TEST_MOCKK}"
-    const val COROUTINES = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Version.TEST_COROUTINES}"
+    const val COROUTINES = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Version.COROUTINES}"
 }

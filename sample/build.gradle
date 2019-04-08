@@ -41,8 +41,4 @@ dependencies {
     implementation ModuleLib.MMKV
     implementation ModuleLib.PAPER
     implementation ModuleLib.HAWK
-
-    testImplementation TestLib.JUNIT
-    androidTestImplementation TestLib.ESPRESSO
-    androidTestImplementation TestLib.RUNNER
 }
