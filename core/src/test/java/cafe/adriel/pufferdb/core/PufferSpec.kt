@@ -100,7 +100,7 @@ object PufferSpec : Spek({
         }
     }
 
-    describe("saving items") {
+    describe("saving single items") {
         it("should save a double value") {
             puffer.put(TestUtil.KEY_DOUBLE, TestUtil.VALUE_DOUBLE)
 
@@ -146,6 +146,62 @@ object PufferSpec : Spek({
         it("should throw when type is not supported") {
             expectThrows<PufferException> {
                 puffer.put(TestUtil.KEY_SERIALIZABLE, TestUtil.VALUE_SERIALIZABLE)
+            }
+        }
+    }
+
+    describe("saving list items") {
+        it("should save a double list") {
+            puffer.put(TestUtil.KEY_DOUBLE_LIST, TestUtil.VALUE_DOUBLE_LIST)
+
+            val value = puffer.get<List<Double>>(TestUtil.KEY_DOUBLE_LIST)
+            expectThat(value).isEqualTo(TestUtil.VALUE_DOUBLE_LIST)
+        }
+
+        it("should save a float list") {
+            puffer.put(TestUtil.KEY_FLOAT_LIST, TestUtil.VALUE_FLOAT_LIST)
+
+            val value = puffer.get<List<Float>>(TestUtil.KEY_FLOAT_LIST)
+            expectThat(value).isEqualTo(TestUtil.VALUE_FLOAT_LIST)
+        }
+
+        it("should save a int list") {
+            puffer.put(TestUtil.KEY_INT_LIST, TestUtil.VALUE_INT_LIST)
+
+            val value = puffer.get<List<Int>>(TestUtil.KEY_INT_LIST)
+            expectThat(value).isEqualTo(TestUtil.VALUE_INT_LIST)
+        }
+
+        it("should save a long list") {
+            puffer.put(TestUtil.KEY_LONG_LIST, TestUtil.VALUE_LONG_LIST)
+
+            val value = puffer.get<List<Long>>(TestUtil.KEY_LONG_LIST)
+            expectThat(value).isEqualTo(TestUtil.VALUE_LONG_LIST)
+        }
+
+        it("should save a boolean list") {
+            puffer.put(TestUtil.KEY_BOOLEAN_LIST, TestUtil.VALUE_BOOLEAN_LIST)
+
+            val value = puffer.get<List<Boolean>>(TestUtil.KEY_BOOLEAN_LIST)
+            expectThat(value).isEqualTo(TestUtil.VALUE_BOOLEAN_LIST)
+        }
+
+        it("should save a string list") {
+            puffer.put(TestUtil.KEY_STRING_LIST, TestUtil.VALUE_STRING_LIST)
+
+            val value = puffer.get<List<String>>(TestUtil.KEY_STRING_LIST)
+            expectThat(value).isEqualTo(TestUtil.VALUE_STRING_LIST)
+        }
+
+        it("should throw when type is not supported") {
+            expectThrows<PufferException> {
+                puffer.put(TestUtil.KEY_SERIALIZABLE_LIST, TestUtil.VALUE_SERIALIZABLE_LIST)
+            }
+        }
+
+        it("should throw when list has null value") {
+            expectThrows<PufferException> {
+                puffer.put(TestUtil.KEY_NULL_LIST, TestUtil.VALUE_NULL_LIST)
             }
         }
     }

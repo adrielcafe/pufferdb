@@ -31,12 +31,12 @@ Protocol Buffers are a language-neutral, platform-neutral extensible mechanism f
 
 ### Supported types
 So far, PufferDB supports the following types:
-- [x] Double
-- [x] Float
-- [x] Int
-- [x] Long
-- [x] Boolean
-- [x] String
+- [x] `Double` and `List<Double>`
+- [x] `Float` and `List<Float>`
+- [x] `Int` and `List<Int>`
+- [x] `Long` and `List<Long>`
+- [x] `Boolean` and `List<Boolean>`
+- [x] `String` and `List<String>`
 
 ## Getting Started
 

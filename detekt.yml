@@ -19,6 +19,7 @@ test-pattern: # Configure exclusions for test sources
     - 'InstanceOfCheckForException'
     - 'NoItParamInMultilineLambda'
     - 'NoTrailingSpaces'
+    - 'MagicNumber'
 
 build:
   maxIssues: 10

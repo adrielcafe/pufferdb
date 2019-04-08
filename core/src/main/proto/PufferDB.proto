@@ -10,12 +10,17 @@ message PufferProto {
 }
 
 message ValueProto {
-    oneof type {
-        double double_value = 1;
-        float float_value = 2;
-        sint32 int_value = 3;
-        sint64 long_value = 4;
-        bool bool_value = 5;
-        string string_value = 6;
+    TypeProto single_value = 1;
+    repeated TypeProto list_value = 2;
+
+    message TypeProto {
+        oneof type {
+            double double_value = 1;
+            float float_value = 2;
+            sint32 int_value = 3;
+            sint64 long_value = 4;
+            bool bool_value = 5;
+            string string_value = 6;
+        }
     }
 }
