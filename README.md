@@ -255,11 +255,12 @@ puffer.apply {
 
 |  | Write 1k strings (ms) | Read 1k strings (ms) |
 |-------------------|-----------------------|----------------------|
-| **PufferDB** | **45** | **6** |
-| SharedPreferences | 268 | 7 |
-| MMKV | 15 | 9 |
-| Paper | 648 | 183 |
-| Hawk | 11116 | 211 |
+| **PufferDB** | **41** | **5** |
+| [SharedPreferences](https://developer.android.com/training/data-storage/shared-preferences) | 267 | 8 |
+| [MMKV](https://github.com/Tencent/MMKV) | 15 | 11 |
+| [Paper](https://github.com/pilgr/Paper) | 842 | 184 |
+| [Binary Prefs](https://github.com/yandextaxitech/binaryprefs) Prefs | 73 | 8 |
+| [Hawk](https://github.com/orhanobut/hawk) | 13716 | 214 |
 
 *Tested on Moto Z2 Plus*
 

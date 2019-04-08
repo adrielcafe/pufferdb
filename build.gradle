@@ -25,6 +25,7 @@ allprojects {
         google()
         jcenter()
         mavenCentral()
+        maven { url 'https://jitpack.io' }
     }
     detekt {
         config = files("${rootDir}/detekt.yml")

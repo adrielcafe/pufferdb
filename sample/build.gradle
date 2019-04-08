@@ -38,7 +38,10 @@ dependencies {
     implementation ModuleLib.COROUTINES_ANDROID
     implementation ModuleLib.RXJAVA
     implementation ModuleLib.RXANDROID
+
+    // Benchmark
     implementation ModuleLib.MMKV
     implementation ModuleLib.PAPER
     implementation ModuleLib.HAWK
+    implementation ModuleLib.BINARY_PREFS
 }

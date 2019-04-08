@@ -16,6 +16,7 @@ object Version {
     internal const val MMKV = "1.0.18"
     internal const val PAPER = "2.6"
     internal const val HAWK = "2.0.1"
+    internal const val BINARY_PREFS = "1.0.1"
 
     internal const val APP_COMPAT = "1.1.0-alpha04"
 
@@ -50,6 +51,7 @@ object ModuleLib {
     const val MMKV = "com.tencent:mmkv:${Version.MMKV}"
     const val PAPER = "io.paperdb:paperdb:${Version.PAPER}"
     const val HAWK = "com.orhanobut:hawk:${Version.HAWK}"
+    const val BINARY_PREFS = "com.github.yandextaxitech:binaryprefs:${Version.BINARY_PREFS}"
 
     const val APP_COMPAT = "androidx.appcompat:appcompat:${Version.APP_COMPAT}"
 

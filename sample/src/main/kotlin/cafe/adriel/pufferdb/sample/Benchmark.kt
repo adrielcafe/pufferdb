@@ -5,6 +5,7 @@ import android.content.Context
 import android.preference.PreferenceManager
 import android.util.Log
 import cafe.adriel.pufferdb.android.AndroidPufferDB
+import com.ironz.binaryprefs.BinaryPreferencesBuilder
 import com.orhanobut.hawk.Hawk
 import com.tencent.mmkv.MMKV
 import io.paperdb.Paper
@@ -22,6 +23,7 @@ class Benchmark(context: Context) {
     private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
     private val mmkv = MMKV.defaultMMKV()
     private val paper = Paper.book()
+    private val binaryPrefs = BinaryPreferencesBuilder(context).build()
 
     fun run() {
         reset()
@@ -38,6 +40,9 @@ class Benchmark(context: Context) {
         paperWrite()
         paperRead()
 
+        binaryPrefsWrite()
+        binaryPrefsRead()
+
         hawkWrite()
         hawkRead()
     }
@@ -48,6 +53,7 @@ class Benchmark(context: Context) {
         sharedPreferences.edit().clear().commit()
         mmkv.clearAll()
         paper.destroy()
+        binaryPrefs.edit().clear().commit()
         Hawk.destroy()
     }
 
@@ -124,6 +130,27 @@ class Benchmark(context: Context) {
             }
         }
         Log.i("PAPER READ", "$duration ms")
+    }
+
+    private fun binaryPrefsWrite() {
+        val duration = measureTimeMillis {
+            repeat(REPEAT_COUNT) { i ->
+                binaryPrefs
+                    .edit()
+                    .putString(keys[i], values[i])
+                    .apply()
+            }
+        }
+        Log.i("BINARY PREFS WRITE", "$duration ms")
+    }
+
+    private fun binaryPrefsRead() {
+        val duration = measureTimeMillis {
+            repeat(REPEAT_COUNT) { i ->
+                binaryPrefs.getString(keys[i], null)
+            }
+        }
+        Log.i("BINARY PREFS READ", "$duration ms")
     }
 
     private fun hawkWrite() {
