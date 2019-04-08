@@ -7,9 +7,6 @@
 [![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg?style=for-the-badge)](https://ktlint.github.io/) 
 [![License MIT](https://img.shields.io/github/license/adrielcafe/pufferdb.svg?style=for-the-badge&color=yellow)](https://opensource.org/licenses/MIT) 
 
-# 🚧 WORK IN PROGRESS 🚧
-This library is currently in beta and should **not** be used in production. Stable release coming shortly!
-
 # ![logo](https://github.com/adrielcafe/pufferdb/blob/master/logo.png?raw=true) PufferDB
 
 **PufferDB** is a :zap: key-value database powered by **P**rotocol B**uffer**s (aka [Protobuf](https://developers.google.com/protocol-buffers/)) and [Coroutines](https://kotlinlang.org/docs/reference/coroutines-overview.html).
