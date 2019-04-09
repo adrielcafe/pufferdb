@@ -9,7 +9,7 @@
 
 # ![logo](https://github.com/adrielcafe/pufferdb/blob/master/logo.png?raw=true) PufferDB
 
-**PufferDB** is a :zap: key-value database powered by **P**rotocol B**uffer**s (aka [Protobuf](https://developers.google.com/protocol-buffers/)) and [Coroutines](https://kotlinlang.org/docs/reference/coroutines-overview.html).
+**PufferDB** is a :zap: key-value storage powered by **P**rotocol B**uffer**s (aka [Protobuf](https://developers.google.com/protocol-buffers/)) and [Coroutines](https://kotlinlang.org/docs/reference/coroutines-overview.html).
 
 The purpose of this library is to provide an efficient, reliable and **Android independent** storage. 
 
@@ -146,9 +146,9 @@ The Coroutines module contains a `CoroutinePufferDB` wrapper class and some usef
 val pufferFile = File("path/to/puffer/file")
 val puffer = CoroutinePufferDB.with(pufferFile)
 
-puffer.apply {
-    // All methods are suspend functions that runs on Dispatchers.IO context
-    launch {
+// All methods are suspend functions that runs on Dispatchers.IO context
+launch {
+    puffer.apply {
         val myValue = get<String>("myKey")
         val myValueWithDefault = get("myKey", "defaultValue")
         
@@ -174,8 +174,8 @@ If you don't want to use this wrapper class, there's some built in extension fun
 val pufferFile = File("path/to/puffer/file")
 val puffer = PufferDB.with(pufferFile) // <- Note that we're using the Core PufferDB
 
-puffer.apply {
-    launch {
+launch {
+    puffer.apply {
         val myValue = getSuspend<String>("myKey")
 
         val myValue = getAsync<String>("myKey").await()
