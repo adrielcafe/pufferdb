@@ -30,7 +30,7 @@ test {
 }
 
 junitJacoco {
-    jacocoVersion = '0.8.3'
+    jacocoVersion = '0.8.4'
     excludes = ['**/cafe/adriel/pufferdb/proto/**']
 }
 

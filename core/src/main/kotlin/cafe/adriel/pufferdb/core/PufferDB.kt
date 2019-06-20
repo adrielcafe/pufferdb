@@ -111,31 +111,29 @@ class PufferDB private constructor(private val pufferFile: File) : Puffer {
             }
             .toMap()
 
-    private suspend fun saveProto() =
-        coroutineScope {
-            writeJob?.cancel()
-            writeJob = async {
-                writeMutex.withLock {
-                    if (isActive) {
-                        val newNest = nest.mapValues { it.value.getProtoValue() }
-                        saveProtoFile(newNest)
-                    }
+    private suspend fun saveProto() = coroutineScope {
+        writeJob?.cancel()
+        writeJob = async {
+            writeMutex.withLock {
+                if (isActive) {
+                    val newNest = nest.mapValues { it.value.getProtoValue() }
+                    saveProtoFile(newNest)
                 }
             }
         }
+    }
 
-    private suspend fun saveProtoFile(newNest: Map<String, ValueProto>) =
-        withContext(Dispatchers.IO) {
-            try {
-                if (!pufferFile.canWrite()) {
-                    throw IOException("Missing write permission")
-                }
-                PufferProto.newBuilder()
-                    .putAllNest(newNest)
-                    .build()
-                    .writeTo(pufferFile.outputStream())
-            } catch (e: IOException) {
-                throw PufferException("Unable to write in ${pufferFile.path}", e)
+    private suspend fun saveProtoFile(newNest: Map<String, ValueProto>) = withContext(Dispatchers.IO) {
+        try {
+            if (!pufferFile.canWrite()) {
+                throw IOException("Missing write permission")
             }
+            PufferProto.newBuilder()
+                .putAllNest(newNest)
+                .build()
+                .writeTo(pufferFile.outputStream())
+        } catch (e: IOException) {
+            throw PufferException("Unable to write in ${pufferFile.path}", e)
         }
+    }
 }

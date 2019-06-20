@@ -68,7 +68,10 @@ object PufferSpec : Spek({
         it("should check for write permission") {
             every { pufferFile.canWrite() } returns false
 
-            puffer.put(TestUtil.KEY_STRING, TestUtil.VALUE_STRING)
+            runBlocking {
+                puffer.put(TestUtil.KEY_STRING, TestUtil.VALUE_STRING)
+                delay(TestUtil.CHANNEL_DELAY)
+            }
 
             coVerify { pufferFile.canWrite() }
         }

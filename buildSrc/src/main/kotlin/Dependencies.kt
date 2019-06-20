@@ -1,31 +1,31 @@
 object Version {
-    internal const val GRADLE_ANDROID = "3.4.0-rc03"
-    internal const val GRADLE_PROTOBUF = "0.8.8"
-    internal const val GRADLE_DETEKT = "1.0.0-RC14"
-    internal const val GRADLE_KTLINT = "7.2.1"
-    internal const val GRADLE_JACOCO = "0.13.0"
+    internal const val GRADLE_ANDROID = "3.4.1"
+    internal const val GRADLE_PROTOBUF = "0.8.9"
+    internal const val GRADLE_DETEKT = "1.0.0-RC15"
+    internal const val GRADLE_KTLINT = "8.1.0"
+    internal const val GRADLE_JACOCO = "0.15.0"
     internal const val GRADLE_VERSIONS = "0.21.0"
     internal const val GRADLE_ANDROID_MAVEN = "2.1"
 
-    internal const val KOTLIN = "1.3.21"
-    internal const val COROUTINES = "1.1.1"
+    internal const val KOTLIN = "1.3.40"
+    internal const val COROUTINES = "1.2.1"
 
-    internal const val RXJAVA = "2.2.8"
+    internal const val RXJAVA = "2.2.9"
     internal const val RXANDROID = "2.1.1"
 
-    internal const val MMKV = "1.0.18"
+    internal const val MMKV = "1.0.22"
     internal const val PAPER = "2.6"
     internal const val HAWK = "2.0.1"
     internal const val BINARY_PREFS = "1.0.1"
 
-    internal const val APP_COMPAT = "1.1.0-alpha04"
+    internal const val APP_COMPAT = "1.1.0-beta01"
 
     internal const val PROTOBUF_LITE = "3.0.1"
-    internal const val PROTOC = "3.7.1"
+    internal const val PROTOC = "3.8.0"
     internal const val PROTOC_LITE = "3.0.0"
 
-    internal const val TEST_SPEK = "2.0.1"
-    internal const val TEST_STRIKT = "0.19.7"
+    internal const val TEST_SPEK = "2.0.5"
+    internal const val TEST_STRIKT = "0.21.0"
     internal const val TEST_MOCKK = "1.9.3"
 }
 
@@ -42,7 +42,7 @@ object ProjectLib {
 
 object ModuleLib {
     const val KOTLIN = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${Version.KOTLIN}"
-    const val COROUTINES_CORE = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Version.COROUTINES}"
+    const val COROUTINES_CORE = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Version.COROUTINES}"
     const val COROUTINES_ANDROID = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Version.COROUTINES}"
 
     const val RXJAVA = "io.reactivex.rxjava2:rxjava:${Version.RXJAVA}"
