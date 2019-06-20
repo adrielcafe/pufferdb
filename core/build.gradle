@@ -16,11 +16,7 @@ dependencies {
     implementation ModuleLib.COROUTINES_CORE
     implementation ModuleLib.PROTOBUF_LITE
 
-    testImplementation TestLib.SPEK_DSL
-    testImplementation TestLib.SPEK_RUNNER
-    testImplementation TestLib.STRIKT
-    testImplementation TestLib.MOCKK
-    testImplementation TestLib.COROUTINES
+    TestLib.all.forEach { testImplementation it }
 }
 
 test {

@@ -6,14 +6,7 @@ buildscript {
         maven { url "https://plugins.gradle.org/m2/" }
     }
     dependencies {
-        classpath ProjectLib.ANDROID
-        classpath ProjectLib.KOTLIN
-        classpath ProjectLib.PROTOBUF
-        classpath ProjectLib.DETEKT
-        classpath ProjectLib.KTLINT
-        classpath ProjectLib.JACOCO
-        classpath ProjectLib.VERSIONS
-        classpath ProjectLib.ANDROID_MAVEN
+        ProjectLib.all.forEach { classpath it }
     }
 }
 
