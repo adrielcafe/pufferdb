@@ -1,33 +1,33 @@
 @file:Suppress("Unused", "MayBeConstant", "MemberVisibilityCanBePrivate")
 
 internal object Version {
-    const val GRADLE_ANDROID = "3.4.1"
-    const val GRADLE_PROTOBUF = "0.8.9"
-    const val GRADLE_DETEKT = "1.0.0-RC15"
-    const val GRADLE_KTLINT = "8.1.0"
+    const val GRADLE_ANDROID = "3.5.3"
+    const val GRADLE_PROTOBUF = "0.8.11"
+    const val GRADLE_DETEKT = "1.1.1"
+    const val GRADLE_KTLINT = "9.1.1"
     const val GRADLE_JACOCO = "0.15.0"
-    const val GRADLE_VERSIONS = "0.21.0"
+    const val GRADLE_VERSIONS = "0.27.0"
     const val GRADLE_MAVEN = "2.1"
 
-    const val KOTLIN = "1.3.40"
-    const val COROUTINES = "1.2.1"
+    const val KOTLIN = "1.3.61"
+    const val COROUTINES = "1.3.3"
 
-    const val RXJAVA = "2.2.9"
+    const val RXJAVA = "2.2.17"
     const val RXANDROID = "2.1.1"
 
-    const val MMKV = "1.0.22"
+    const val MMKV = "1.0.24"
     const val PAPER = "2.6"
     const val HAWK = "2.0.1"
     const val BINARY_PREFS = "1.0.1"
 
-    const val APP_COMPAT = "1.0.2"
+    const val APP_COMPAT = "1.1.0"
 
     const val PROTOBUF_LITE = "3.0.1"
-    const val PROTOC = "3.8.0"
+    const val PROTOC = "3.11.3"
     const val PROTOC_LITE = "3.0.0"
 
-    const val TEST_SPEK = "2.0.5"
-    const val TEST_STRIKT = "0.21.0"
+    const val TEST_SPEK = "2.0.9"
+    const val TEST_STRIKT = "0.23.4"
     const val TEST_MOCKK = "1.9.3"
 }
 

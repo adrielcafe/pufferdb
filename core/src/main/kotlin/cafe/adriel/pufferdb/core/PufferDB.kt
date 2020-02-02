@@ -2,44 +2,53 @@ package cafe.adriel.pufferdb.core
 
 import cafe.adriel.pufferdb.proto.PufferProto
 import cafe.adriel.pufferdb.proto.ValueProto
+import java.io.File
+import java.io.IOException
+import java.util.concurrent.ConcurrentHashMap
+import kotlin.coroutines.CoroutineContext
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.channels.consumeEach
+import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
-import java.io.File
-import java.io.IOException
-import java.util.concurrent.ConcurrentHashMap
 
-class PufferDB private constructor(private val pufferFile: File) : Puffer {
+class PufferDB private constructor(
+    scope: CoroutineScope,
+    private val context: CoroutineContext,
+    private val pufferFile: File
+) : Puffer {
 
     companion object {
-        fun with(pufferFile: File): Puffer = PufferDB(pufferFile)
+
+        fun with(pufferFile: File): Puffer =
+            PufferDB(GlobalScope, Dispatchers.IO, pufferFile)
+
+        fun with(scope: CoroutineScope, context: CoroutineContext, pufferFile: File): Puffer =
+            PufferDB(scope, context, pufferFile)
     }
 
     private val nest = ConcurrentHashMap<String, Any>()
 
-    private val writeChannel = Channel<Unit>(Channel.CONFLATED)
+    private val writeChannel = ConflatedBroadcastChannel<Unit>()
     private val writeMutex = Mutex()
     private var writeJob: Job? = null
 
     init {
-        GlobalScope.launch(Dispatchers.Main) {
-            /**
-             * TODO Replace by Flow when became stable
-             * https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-flow/
-             */
-            writeChannel.consumeEach { saveProto() }
-        }
-
-        loadProto()
+        writeChannel
+            .asFlow()
+            .onStart { loadProto() }
+            .onEach { saveProto() }
+            .launchIn(scope)
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -123,7 +132,7 @@ class PufferDB private constructor(private val pufferFile: File) : Puffer {
         }
     }
 
-    private suspend fun saveProtoFile(newNest: Map<String, ValueProto>) = withContext(Dispatchers.IO) {
+    private suspend fun saveProtoFile(newNest: Map<String, ValueProto>) = withContext(context) {
         try {
             if (!pufferFile.canWrite()) {
                 throw IOException("Missing write permission")

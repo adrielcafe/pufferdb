@@ -107,7 +107,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         }
     }
 
-    private fun runCoroutine() = launch {
+    private fun runCoroutine() = mainScope.launch {
         pufferCoroutine.apply {
             Log.i(TAG_COROUTINES, "Cleaning database...")
             removeAll()

@@ -17,7 +17,6 @@ internal fun Any.isTypeSupported(): Boolean =
         isSingleTypeSupported()
     }
 
-// TODO Try to optimize with reified type
 private fun List<*>.isListTypeSupported(): Boolean {
     forEach { singleValue ->
         if (singleValue == null || !singleValue.isSingleTypeSupported()) {

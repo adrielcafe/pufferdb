@@ -3,9 +3,6 @@ package cafe.adriel.pufferdb.core
 import java.io.Serializable
 
 object TestUtil {
-    // TODO Try to avoid this explicit delay
-    const val CHANNEL_DELAY = 3000L
-
     const val KEY_DOUBLE = "doubleValue"
     const val KEY_DOUBLE_LIST = "doubleListValue"
     const val KEY_FLOAT = "floatValue"

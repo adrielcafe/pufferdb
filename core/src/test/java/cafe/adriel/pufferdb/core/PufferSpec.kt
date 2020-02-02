@@ -3,9 +3,10 @@ package cafe.adriel.pufferdb.core
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.spyk
+import java.io.File
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.TestCoroutineScope
 import kotlinx.coroutines.test.setMain
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -15,14 +16,16 @@ import strikt.assertions.isEmpty
 import strikt.assertions.isEqualTo
 import strikt.assertions.isFalse
 import strikt.assertions.isTrue
-import java.io.File
 
 object PufferSpec : Spek({
+    val scope = TestCoroutineScope()
+    val context = TestCoroutineDispatcher()
+
     val pufferFile by memoized {
         spyk(File.createTempFile("puffer", ".db"))
     }
     val puffer by memoized {
-        spyk(PufferDB.with(pufferFile))
+        spyk(PufferDB.with(scope, context, pufferFile))
     }
 
     beforeEachTest {
@@ -36,15 +39,12 @@ object PufferSpec : Spek({
     describe("reading/writing files") {
         it("should load a valid file") {
             val allKeys = mutableSetOf<String>()
-            runBlocking {
-                TestUtil.ALL_SUPPORTED_TYPES.forEach {
-                    allKeys.add(it.first)
-                    puffer.put(it.first, it.second)
-                }
-                delay(TestUtil.CHANNEL_DELAY)
+            TestUtil.ALL_SUPPORTED_TYPES.forEach {
+                allKeys.add(it.first)
+                puffer.put(it.first, it.second)
             }
 
-            val newPuffer = PufferDB.with(pufferFile)
+            val newPuffer = PufferDB.with(scope, context, pufferFile)
 
             expectThat(newPuffer.getKeys()).isEqualTo(allKeys)
         }
@@ -52,26 +52,15 @@ object PufferSpec : Spek({
         it("should create a new file if it does not exists") {
             pufferFile.delete()
 
-            PufferDB.with(pufferFile)
+            PufferDB.with(scope, context, pufferFile)
 
             expectThat(pufferFile.exists()).isTrue()
-        }
-
-        it("should throw when read an invalid file") {
-            val invalidPufferFile = File("\"/.db\"")
-
-            expectThrows<PufferException> {
-                PufferDB.with(invalidPufferFile)
-            }
         }
 
         it("should check for write permission") {
             every { pufferFile.canWrite() } returns false
 
-            runBlocking {
-                puffer.put(TestUtil.KEY_STRING, TestUtil.VALUE_STRING)
-                delay(TestUtil.CHANNEL_DELAY)
-            }
+            puffer.put(TestUtil.KEY_STRING, TestUtil.VALUE_STRING)
 
             coVerify { pufferFile.canWrite() }
         }

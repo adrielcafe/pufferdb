@@ -1,8 +1,8 @@
 package cafe.adriel.pufferdb.coroutines
 
 import cafe.adriel.pufferdb.core.Puffer
-import kotlinx.coroutines.CoroutineScope
 import kotlin.coroutines.CoroutineContext
+import kotlinx.coroutines.CoroutineScope
 
 // Suspend functions
 
