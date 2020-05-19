@@ -81,6 +81,8 @@ To create a new `Puffer` instance you must tell which file to use.
 ```kotlin
 val pufferFile = File("path/to/puffer/file")
 val puffer = PufferDB.with(pufferFile)
+// or
+val puffer = PufferDB.with(pufferFile, myCoroutineScope, myCoroutineDispatcher)
 ```
 
 If you are on Android, I recommend to use the [Context.filesDir](https://developer.android.com/training/data-storage/files#WriteFileInternal) as the parent folder. If you want to save in the external storage remember to [ask for write permission](https://developer.android.com/training/data-storage/files#ExternalStoragePermissions) first.
@@ -257,12 +259,12 @@ puffer.apply {
 
 |  | Write 1k strings (ms) | Read 1k strings (ms) |
 |-------------------|-----------------------|----------------------|
-| **PufferDB** | **41** | **5** |
-| [SharedPreferences](https://developer.android.com/training/data-storage/shared-preferences) | 267 | 8 |
-| [MMKV](https://github.com/Tencent/MMKV) | 15 | 11 |
-| [Paper](https://github.com/pilgr/Paper) | 842 | 184 |
-| [Binary Prefs](https://github.com/yandextaxitech/binaryprefs) | 73 | 8 |
-| [Hawk](https://github.com/orhanobut/hawk) | 13716 | 214 |
+| **PufferDB** | **28** | **9** |
+| [SharedPreferences](https://developer.android.com/training/data-storage/shared-preferences) | 291 | 14 |
+| [MMKV](https://github.com/Tencent/MMKV) | 16 | 10 |
+| [Paper](https://github.com/pilgr/Paper) | 780 | 170 |
+| [Binary Prefs](https://github.com/yandextaxitech/binaryprefs) | 65 | 9 |
+| [Hawk](https://github.com/orhanobut/hawk) | 12053 | 192 |
 
 *Tested on Moto Z2 Plus*
 

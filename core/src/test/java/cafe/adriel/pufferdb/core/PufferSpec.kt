@@ -25,7 +25,7 @@ object PufferSpec : Spek({
         spyk(File.createTempFile("puffer", ".db"))
     }
     val puffer by memoized {
-        spyk(PufferDB.with(scope, context, pufferFile))
+        spyk(PufferDB.with(pufferFile, scope, context))
     }
 
     beforeEachTest {
@@ -44,15 +44,15 @@ object PufferSpec : Spek({
                 puffer.put(it.first, it.second)
             }
 
-            val newPuffer = PufferDB.with(scope, context, pufferFile)
+            val newPuffer = PufferDB.with(pufferFile, scope, context)
 
-            expectThat(newPuffer.getKeys()).isEqualTo(allKeys)
+            expectThat(newPuffer.getKeys()) isEqualTo allKeys
         }
 
         it("should create a new file if it does not exists") {
             pufferFile.delete()
 
-            PufferDB.with(scope, context, pufferFile)
+            PufferDB.with(pufferFile, scope, context)
 
             expectThat(pufferFile.exists()).isTrue()
         }
@@ -97,42 +97,42 @@ object PufferSpec : Spek({
             puffer.put(TestUtil.KEY_DOUBLE, TestUtil.VALUE_DOUBLE)
 
             val value = puffer.get<Double>(TestUtil.KEY_DOUBLE)
-            expectThat(value).isEqualTo(TestUtil.VALUE_DOUBLE)
+            expectThat(value) isEqualTo TestUtil.VALUE_DOUBLE
         }
 
         it("should save a float value") {
             puffer.put(TestUtil.KEY_FLOAT, TestUtil.VALUE_FLOAT)
 
             val value = puffer.get<Float>(TestUtil.KEY_FLOAT)
-            expectThat(value).isEqualTo(TestUtil.VALUE_FLOAT)
+            expectThat(value) isEqualTo TestUtil.VALUE_FLOAT
         }
 
         it("should save a int value") {
             puffer.put(TestUtil.KEY_INT, TestUtil.VALUE_INT)
 
             val value = puffer.get<Int>(TestUtil.KEY_INT)
-            expectThat(value).isEqualTo(TestUtil.VALUE_INT)
+            expectThat(value) isEqualTo TestUtil.VALUE_INT
         }
 
         it("should save a long value") {
             puffer.put(TestUtil.KEY_LONG, TestUtil.VALUE_LONG)
 
             val value = puffer.get<Long>(TestUtil.KEY_LONG)
-            expectThat(value).isEqualTo(TestUtil.VALUE_LONG)
+            expectThat(value) isEqualTo TestUtil.VALUE_LONG
         }
 
         it("should save a boolean value") {
             puffer.put(TestUtil.KEY_BOOLEAN, TestUtil.VALUE_BOOLEAN)
 
             val value = puffer.get<Boolean>(TestUtil.KEY_BOOLEAN)
-            expectThat(value).isEqualTo(TestUtil.VALUE_BOOLEAN)
+            expectThat(value) isEqualTo TestUtil.VALUE_BOOLEAN
         }
 
         it("should save a string value") {
             puffer.put(TestUtil.KEY_STRING, TestUtil.VALUE_STRING)
 
             val value = puffer.get<String>(TestUtil.KEY_STRING)
-            expectThat(value).isEqualTo(TestUtil.VALUE_STRING)
+            expectThat(value) isEqualTo TestUtil.VALUE_STRING
         }
 
         it("should throw when type is not supported") {
@@ -147,42 +147,42 @@ object PufferSpec : Spek({
             puffer.put(TestUtil.KEY_DOUBLE_LIST, TestUtil.VALUE_DOUBLE_LIST)
 
             val value = puffer.get<List<Double>>(TestUtil.KEY_DOUBLE_LIST)
-            expectThat(value).isEqualTo(TestUtil.VALUE_DOUBLE_LIST)
+            expectThat(value) isEqualTo TestUtil.VALUE_DOUBLE_LIST
         }
 
         it("should save a float list") {
             puffer.put(TestUtil.KEY_FLOAT_LIST, TestUtil.VALUE_FLOAT_LIST)
 
             val value = puffer.get<List<Float>>(TestUtil.KEY_FLOAT_LIST)
-            expectThat(value).isEqualTo(TestUtil.VALUE_FLOAT_LIST)
+            expectThat(value) isEqualTo TestUtil.VALUE_FLOAT_LIST
         }
 
         it("should save a int list") {
             puffer.put(TestUtil.KEY_INT_LIST, TestUtil.VALUE_INT_LIST)
 
             val value = puffer.get<List<Int>>(TestUtil.KEY_INT_LIST)
-            expectThat(value).isEqualTo(TestUtil.VALUE_INT_LIST)
+            expectThat(value) isEqualTo TestUtil.VALUE_INT_LIST
         }
 
         it("should save a long list") {
             puffer.put(TestUtil.KEY_LONG_LIST, TestUtil.VALUE_LONG_LIST)
 
             val value = puffer.get<List<Long>>(TestUtil.KEY_LONG_LIST)
-            expectThat(value).isEqualTo(TestUtil.VALUE_LONG_LIST)
+            expectThat(value) isEqualTo TestUtil.VALUE_LONG_LIST
         }
 
         it("should save a boolean list") {
             puffer.put(TestUtil.KEY_BOOLEAN_LIST, TestUtil.VALUE_BOOLEAN_LIST)
 
             val value = puffer.get<List<Boolean>>(TestUtil.KEY_BOOLEAN_LIST)
-            expectThat(value).isEqualTo(TestUtil.VALUE_BOOLEAN_LIST)
+            expectThat(value) isEqualTo TestUtil.VALUE_BOOLEAN_LIST
         }
 
         it("should save a string list") {
             puffer.put(TestUtil.KEY_STRING_LIST, TestUtil.VALUE_STRING_LIST)
 
             val value = puffer.get<List<String>>(TestUtil.KEY_STRING_LIST)
-            expectThat(value).isEqualTo(TestUtil.VALUE_STRING_LIST)
+            expectThat(value) isEqualTo TestUtil.VALUE_STRING_LIST
         }
 
         it("should throw when type is not supported") {
@@ -201,7 +201,7 @@ object PufferSpec : Spek({
     describe("retrieving items") {
         it("should return the default value") {
             val value = puffer.get(TestUtil.KEY_STRING, TestUtil.VALUE_STRING)
-            expectThat(value).isEqualTo(TestUtil.VALUE_STRING)
+            expectThat(value) isEqualTo TestUtil.VALUE_STRING
         }
 
         it("should throw when value do not exists") {
@@ -235,7 +235,7 @@ object PufferSpec : Spek({
             }
 
             val keys = puffer.getKeys()
-            expectThat(keys).isEqualTo(allKeys)
+            expectThat(keys) isEqualTo allKeys
         }
     }
 

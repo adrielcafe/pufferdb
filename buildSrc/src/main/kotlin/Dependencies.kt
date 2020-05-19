@@ -1,34 +1,35 @@
 @file:Suppress("Unused", "MayBeConstant", "MemberVisibilityCanBePrivate")
 
 internal object Version {
-    const val GRADLE_ANDROID = "3.5.3"
-    const val GRADLE_PROTOBUF = "0.8.11"
-    const val GRADLE_DETEKT = "1.1.1"
-    const val GRADLE_KTLINT = "9.1.1"
-    const val GRADLE_JACOCO = "0.15.0"
-    const val GRADLE_VERSIONS = "0.27.0"
+    const val GRADLE_ANDROID = "3.6.3"
+    const val GRADLE_PROTOBUF = "0.8.12"
+    const val GRADLE_DETEKT = "1.9.1"
+    const val GRADLE_KTLINT = "9.2.1"
+    const val GRADLE_JACOCO = "0.16.0"
+    const val GRADLE_VERSIONS = "0.28.0"
     const val GRADLE_MAVEN = "2.1"
 
-    const val KOTLIN = "1.3.61"
-    const val COROUTINES = "1.3.3"
+    const val KOTLIN = "1.3.72"
+    const val COROUTINES = "1.3.6"
 
-    const val RXJAVA = "2.2.17"
-    const val RXANDROID = "2.1.1"
+    const val RXJAVA = "3.0.3"
+    const val RXANDROID = "3.0.0"
 
-    const val MMKV = "1.0.24"
-    const val PAPER = "2.6"
+    const val ANDROIDX_PREFERENCE = "1.1.1"
+    const val MMKV = "1.1.1"
+    const val PAPER = "2.7.1"
     const val HAWK = "2.0.1"
     const val BINARY_PREFS = "1.0.1"
 
     const val APP_COMPAT = "1.1.0"
 
     const val PROTOBUF_LITE = "3.0.1"
-    const val PROTOC = "3.11.3"
+    const val PROTOC = "3.12.0"
     const val PROTOC_LITE = "3.0.0"
 
     const val TEST_SPEK = "2.0.9"
-    const val TEST_STRIKT = "0.23.4"
-    const val TEST_MOCKK = "1.9.3"
+    const val TEST_STRIKT = "0.25.0"
+    const val TEST_MOCKK = "1.10.0"
 }
 
 object ProjectLib {
@@ -53,9 +54,10 @@ object ModuleLib {
     const val PROTOC_LITE = "com.google.protobuf:protoc-gen-javalite:${Version.PROTOC_LITE}"
     const val PROTOBUF_LITE = "com.google.protobuf:protobuf-lite:${Version.PROTOBUF_LITE}"
 
-    const val RXJAVA = "io.reactivex.rxjava2:rxjava:${Version.RXJAVA}"
-    const val RXANDROID = "io.reactivex.rxjava2:rxandroid:${Version.RXANDROID}"
+    const val RXJAVA = "io.reactivex.rxjava3:rxjava:${Version.RXJAVA}"
+    const val RXANDROID = "io.reactivex.rxjava3:rxandroid:${Version.RXANDROID}"
 
+    const val ANDROIDX_PREFERENCE = "androidx.preference:preference-ktx:${Version.ANDROIDX_PREFERENCE}"
     const val MMKV = "com.tencent:mmkv:${Version.MMKV}"
     const val PAPER = "io.paperdb:paperdb:${Version.PAPER}"
     const val HAWK = "com.orhanobut:hawk:${Version.HAWK}"

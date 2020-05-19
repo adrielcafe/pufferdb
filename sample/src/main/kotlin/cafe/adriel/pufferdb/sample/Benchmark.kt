@@ -1,9 +1,9 @@
 package cafe.adriel.pufferdb.sample
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.preference.PreferenceManager
 import android.util.Log
+import androidx.core.content.edit
+import androidx.preference.PreferenceManager
 import cafe.adriel.pufferdb.android.AndroidPufferDB
 import com.ironz.binaryprefs.BinaryPreferencesBuilder
 import com.orhanobut.hawk.Hawk
@@ -12,8 +12,10 @@ import io.paperdb.Paper
 import kotlin.system.measureTimeMillis
 
 class Benchmark(context: Context) {
+
     companion object {
-        private const val REPEAT_COUNT = 1000
+
+        private const val REPEAT_COUNT = 1_000
     }
 
     private val keys = Array(REPEAT_COUNT) { "Key $it" }
@@ -47,10 +49,9 @@ class Benchmark(context: Context) {
         hawkRead()
     }
 
-    @SuppressLint("ApplySharedPref")
     private fun reset() {
         puffer.removeAll()
-        sharedPreferences.edit().clear().commit()
+        sharedPreferences.edit(commit = true) { clear() }
         mmkv.clearAll()
         paper.destroy()
         binaryPrefs.edit().clear().commit()
@@ -78,10 +79,9 @@ class Benchmark(context: Context) {
     private fun sharedPreferencesWrite() {
         val duration = measureTimeMillis {
             repeat(REPEAT_COUNT) { i ->
-                sharedPreferences
-                    .edit()
-                    .putString(keys[i], values[i])
-                    .apply()
+                sharedPreferences.edit {
+                    putString(keys[i], values[i])
+                }
             }
         }
         Log.i("SHARED PREF WRITE", "$duration ms")

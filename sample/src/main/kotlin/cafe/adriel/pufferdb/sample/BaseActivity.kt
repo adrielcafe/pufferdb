@@ -1,7 +1,7 @@
 package cafe.adriel.pufferdb.sample
 
 import androidx.appcompat.app.AppCompatActivity
-import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxjava3.disposables.CompositeDisposable
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 

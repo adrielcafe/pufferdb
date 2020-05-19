@@ -8,21 +8,25 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 
 class CoroutinePufferDB private constructor(
+    pufferFile: File,
     scope: CoroutineScope,
-    context: CoroutineContext,
-    pufferFile: File
+    dispatcher: CoroutineContext
 ) : CoroutinePuffer {
 
     companion object {
 
         fun with(pufferFile: File): CoroutinePuffer =
-            CoroutinePufferDB(GlobalScope, Dispatchers.IO, pufferFile)
+            CoroutinePufferDB(pufferFile, GlobalScope, Dispatchers.IO)
 
-        fun with(scope: CoroutineScope, context: CoroutineContext, pufferFile: File): CoroutinePuffer =
-            CoroutinePufferDB(scope, context, pufferFile)
+        fun with(
+            pufferFile: File,
+            scope: CoroutineScope,
+            dispatcher: CoroutineContext = Dispatchers.IO
+        ): CoroutinePuffer =
+            CoroutinePufferDB(pufferFile, scope, dispatcher)
     }
 
-    private val puffer by lazy { PufferDB.with(scope, context, pufferFile) }
+    private val puffer by lazy { PufferDB.with(pufferFile, scope, dispatcher) }
 
     override suspend fun <T : Any> get(key: String, defaultValue: T?) = puffer.suspendGet(key, defaultValue)
 

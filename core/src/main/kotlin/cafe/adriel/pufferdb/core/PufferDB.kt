@@ -10,50 +10,50 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.async
-import kotlinx.coroutines.channels.ConflatedBroadcastChannel
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import kotlinx.coroutines.withContext
 
 class PufferDB private constructor(
-    scope: CoroutineScope,
-    private val context: CoroutineContext,
-    private val pufferFile: File
+    private val pufferFile: File,
+    private val scope: CoroutineScope,
+    private val dispatcher: CoroutineContext
 ) : Puffer {
 
     companion object {
 
         fun with(pufferFile: File): Puffer =
-            PufferDB(GlobalScope, Dispatchers.IO, pufferFile)
+            PufferDB(pufferFile, GlobalScope, Dispatchers.IO)
 
-        fun with(scope: CoroutineScope, context: CoroutineContext, pufferFile: File): Puffer =
-            PufferDB(scope, context, pufferFile)
+        fun with(pufferFile: File, scope: CoroutineScope, dispatcher: CoroutineContext = Dispatchers.IO): Puffer =
+            PufferDB(pufferFile, scope, dispatcher)
     }
 
-    private val nest = ConcurrentHashMap<String, Any>()
+    private val state = ConcurrentHashMap<String, Any>()
+    private val stateFlow = MutableStateFlow(0L)
 
-    private val writeChannel = ConflatedBroadcastChannel<Unit>()
     private val writeMutex = Mutex()
     private var writeJob: Job? = null
 
     init {
-        writeChannel
-            .asFlow()
+        stateFlow
+            .drop(1)
             .onStart { loadProto() }
-            .onEach { saveProto() }
+            .onEach { saveProto(state) }
+            .flowOn(dispatcher)
             .launchIn(scope)
     }
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : Any> get(key: String, defaultValue: T?): T = try {
-        val value = nest.getOrDefault(key, null)
+        val value = state.getOrDefault(key, null)
         if (value == null) {
             throw PufferException("The key '$key' has no value saved")
         } else {
@@ -66,27 +66,31 @@ class PufferDB private constructor(
 
     override fun <T : Any> put(key: String, value: T) {
         if (value.isTypeSupported()) {
-            nest[key] = value
-            writeChannel.offer(Unit)
+            state[key] = value
+            updateState()
         } else {
             throw PufferException("${value.className()} is not supported")
         }
     }
 
     override fun getKeys(): Set<String> =
-        nest.keys().toList().toSet()
+        state.keys
 
     override fun contains(key: String) =
-        nest.containsKey(key)
+        state.containsKey(key)
 
     override fun remove(key: String) {
-        nest.remove(key)
-        writeChannel.offer(Unit)
+        state -= key
+        updateState()
     }
 
     override fun removeAll() {
-        nest.clear()
-        writeChannel.offer(Unit)
+        state.clear()
+        updateState()
+    }
+
+    private fun updateState() {
+        stateFlow.value = System.currentTimeMillis()
     }
 
     private fun loadProto() {
@@ -100,7 +104,7 @@ class PufferDB private constructor(
         } catch (e: IOException) {
             throw PufferException("Unable to read ${pufferFile.path}", e)
         }
-        nest.run {
+        state.run {
             clear()
             putAll(currentNest)
         }
@@ -120,19 +124,19 @@ class PufferDB private constructor(
             }
             .toMap()
 
-    private suspend fun saveProto() = coroutineScope {
+    private fun saveProto(state: Map<String, Any>) {
         writeJob?.cancel()
-        writeJob = async {
+        writeJob = scope.launch(dispatcher) {
             writeMutex.withLock {
                 if (isActive) {
-                    val newNest = nest.mapValues { it.value.getProtoValue() }
+                    val newNest = state.mapValues { it.value.getProtoValue() }
                     saveProtoFile(newNest)
                 }
             }
         }
     }
 
-    private suspend fun saveProtoFile(newNest: Map<String, ValueProto>) = withContext(context) {
+    private fun saveProtoFile(newNest: Map<String, ValueProto>) {
         try {
             if (!pufferFile.canWrite()) {
                 throw IOException("Missing write permission")

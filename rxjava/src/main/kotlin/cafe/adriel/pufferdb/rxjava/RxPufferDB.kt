@@ -6,6 +6,7 @@ import java.io.File
 class RxPufferDB private constructor(pufferFile: File) : RxPuffer {
 
     companion object {
+
         fun with(pufferFile: File): RxPuffer = RxPufferDB(pufferFile)
     }
 
