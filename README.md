@@ -114,9 +114,9 @@ But unlike `SharedPreferences`, there's no `apply()` or `commit()`. Changes are 
 ### Threading
 PufferDB uses a [ConcurrentHashMap](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ConcurrentHashMap.html) to manage a thread-safe in-memory cache for fast read and write operations.
 
-Changes are saved asynchronously with the help of a [Conflated Channel](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-channel/index.html) (to save the most recent state in a race condition) and [Mutex](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.sync/-mutex/index.html) locker (to prevent simultaneous writes).
+Changes are saved asynchronously with the help of a [StateFlow](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-state-flow/index.html) (to save the most recent state in a race condition) and [Mutex](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.sync/-mutex/index.html) locker (to prevent simultaneous writes).
 
-It is possible to run the API methods on the Android Main Thread, but you should *avoid that*. You can use one of the wrapper modules or built in extension functions for that.
+It is possible to run the API methods on the Android Main Thread, but you should *avoid that*. You can use one of the wrapper modules or built in extension functions for that (listed below).
 
 ## Android
 The Android module contains an `AndroidPufferDB` helper class:
@@ -182,10 +182,9 @@ launch {
 
         val myValue = getAsync<String>("myKey").await()
         
-        // You can use your custom coroutine context...
-        putSuspend("myOtherKey", 123, Dispatchers.Unconfined)
+        // You can use your own coroutine scope and dispatcher
+        putSuspend("myOtherKey", 123, myCoroutineScope, myCoroutineDispatcher)
 
-        // ... And your custom coroutine scope
         putAsync("myOtherKey", 123, myActivityScope).await()
     }
 }
