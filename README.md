@@ -256,14 +256,43 @@ puffer.apply {
 
 ## Benchmark
 
+### Write & Read
 |  | Write 1k strings (ms) | Read 1k strings (ms) |
 |-------------------|-----------------------|----------------------|
-| **PufferDB** | **28** | **9** |
-| [SharedPreferences](https://developer.android.com/training/data-storage/shared-preferences) | 291 | 14 |
-| [MMKV](https://github.com/Tencent/MMKV) | 16 | 10 |
-| [Paper](https://github.com/pilgr/Paper) | 780 | 170 |
-| [Binary Prefs](https://github.com/yandextaxitech/binaryprefs) | 65 | 9 |
-| [Hawk](https://github.com/orhanobut/hawk) | 12053 | 192 |
+| **PufferDB** | **20** | **5** |
+| [SharedPreferences](https://developer.android.com/training/data-storage/shared-preferences) | 278 | 7 |
+| [MMKV](https://github.com/Tencent/MMKV) | 13 | 8 |
+| [Paper](https://github.com/pilgr/Paper) | 818 | 169 |
+| [Binary Prefs](https://github.com/yandextaxitech/binaryprefs) | 121 | 9 |
+| [Hawk](https://github.com/orhanobut/hawk) | 15183 | 207 |
+
+|  | Write 100k strings (ms) | Read 100k strings (ms) |
+|-------------------|-----------------------|----------------------|
+| **PufferDB** | **259** | **32** |
+| [SharedPreferences](https://developer.android.com/training/data-storage/shared-preferences) | 💥 | 💥 |
+| [MMKV](https://github.com/Tencent/MMKV) | 871 | 516 |
+| [Paper](https://github.com/pilgr/Paper) | 💥 | 💥 |
+| [Binary Prefs](https://github.com/yandextaxitech/binaryprefs) | 1082 | 101 |
+| [Hawk](https://github.com/orhanobut/hawk) | 💥 | 💥 |
+
+### File size
+|  | 1k strings (kb) |
+|-------------------|-----------------------|
+| **PufferDB** | **25** |
+| [SharedPreferences](https://developer.android.com/training/data-storage/shared-preferences) | 20 |
+| [MMKV](https://github.com/Tencent/MMKV) | 40 |
+| [Paper](https://github.com/pilgr/Paper) | 61 |
+| [Binary Prefs](https://github.com/yandextaxitech/binaryprefs) | 53 |
+| [Hawk](https://github.com/orhanobut/hawk) | 27 |
+
+|  | 100k strings (kb) |
+|-------------------|-----------------------|
+| **PufferDB** | **2.907** |
+| [SharedPreferences](https://developer.android.com/training/data-storage/shared-preferences) | 💥 |
+| [MMKV](https://github.com/Tencent/MMKV) | 4.104 |
+| [Paper](https://github.com/pilgr/Paper) | 💥 |
+| [Binary Prefs](https://github.com/yandextaxitech/binaryprefs) | 5.175 |
+| [Hawk](https://github.com/orhanobut/hawk) | 💥 |
 
 *Tested on Moto Z2 Plus*
 

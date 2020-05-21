@@ -9,6 +9,7 @@ import com.ironz.binaryprefs.BinaryPreferencesBuilder
 import com.orhanobut.hawk.Hawk
 import com.tencent.mmkv.MMKV
 import io.paperdb.Paper
+import java.io.File
 import kotlin.system.measureTimeMillis
 
 class Benchmark(context: Context) {
@@ -21,11 +22,20 @@ class Benchmark(context: Context) {
     private val keys = Array(REPEAT_COUNT) { "Key $it" }
     private val values = Array(REPEAT_COUNT) { "Value $it" }
 
+    private val pufferFile = AndroidPufferDB.getInternalFile("puffer.db")
     private val puffer = AndroidPufferDB.withDefault()
+
+    private val sharedPreferencesDir = File(context.filesDir, "preferences")
     private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+
+    private val mmkvDir = File(MMKV.getRootDir())
     private val mmkv = MMKV.defaultMMKV()
+
     private val paper = Paper.book()
-    private val binaryPrefs = BinaryPreferencesBuilder(context).build()
+    private val paperDir = File(paper.path)
+
+    private val binaryPrefsDir = File(context.filesDir, "binaryPrefs")
+    private val binaryPrefs = BinaryPreferencesBuilder(context).customDirectory(binaryPrefsDir).build()
 
     fun run() {
         reset()
@@ -170,4 +180,9 @@ class Benchmark(context: Context) {
         }
         Log.i("HAWK READ", "$duration ms")
     }
+
+    private fun File.lengthRecursively(): Long =
+        walk().fold(0L) { acc, file ->
+            acc + file.length()
+        }
 }

@@ -10,20 +10,20 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
 class PufferDB private constructor(
     private val pufferFile: File,
-    private val scope: CoroutineScope,
+    scope: CoroutineScope,
     private val dispatcher: CoroutineContext
 ) : Puffer {
 
@@ -43,9 +43,10 @@ class PufferDB private constructor(
     private var writeJob: Job? = null
 
     init {
+        loadProto()
+
         stateFlow
             .drop(1)
-            .onStart { loadProto() }
             .onEach { saveProto(state) }
             .flowOn(dispatcher)
             .launchIn(scope)
@@ -53,7 +54,7 @@ class PufferDB private constructor(
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : Any> get(key: String, defaultValue: T?): T = try {
-        val value = state.getOrDefault(key, null)
+        val value = state[key]
         if (value == null) {
             throw PufferException("The key '$key' has no value saved")
         } else {
@@ -124,9 +125,9 @@ class PufferDB private constructor(
             }
             .toMap()
 
-    private fun saveProto(state: Map<String, Any>) {
+    private suspend fun saveProto(state: Map<String, Any>) = coroutineScope {
         writeJob?.cancel()
-        writeJob = scope.launch(dispatcher) {
+        writeJob = async(dispatcher) {
             writeMutex.withLock {
                 if (isActive) {
                     val newNest = state.mapValues { it.value.getProtoValue() }
